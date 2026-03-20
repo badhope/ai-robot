@@ -138,6 +138,21 @@ pnpm dev
 
 🎉 **验证**：在群里发送 `@你的机器人 你好`
 
+### 🎯 Setup UI 控制台（可选）
+
+启动本地控制台，查看系统状态：
+
+```bash
+cd apps/setup-ui
+pnpm start
+# 打开 http://localhost:3002
+```
+
+控制台功能：
+- 📊 查看系统状态（Ollama、NapCatQQ、模型）
+- 💬 查看 Prompt 预设
+- 🚀 下一步操作引导
+
 ---
 
 ## 🔧 配置说明
@@ -225,16 +240,27 @@ PRIVATE_AUTO_REPLY=true           # 私聊自动回复
 ```
 ai-robot/
 ├── apps/
-│   └── server/              # 🤖 主服务
+│   ├── server/              # 🤖 主服务
+│   └── setup-ui/            # 🎯 Setup UI 控制台
 ├── packages/
-│   ├── qq-adapter/         # 💬 QQ 适配器
+│   ├── core/               # 📋 核心接口定义
+│   ├── qq-adapter/         # 💬 QQ 适配器 (NapCatQQ)
 │   ├── ollama-adapter/     # 🤖 Ollama 适配器
-│   ├── sqlite-storage/     # 💾 持久化存储
+│   ├── sqlite-storage/     # 💾 SQLite 持久化
+│   ├── memory-storage/     # 💾 内存存储
+│   ├── doctor/             # 🩺 环境检查工具
 │   └── config/             # ⚙️ 配置管理
+├── prompts/                # 💬 Prompt 预设
+│   ├── default/            # 默认风格
+│   ├── group/              # 群聊专用
+│   └── helper/             # 辅助提示
 ├── docs/
 │   ├── quick-start-qq.md   # 🚀 快速开始
 │   ├── deployment.md       # 🐳 部署指南
-│   └── prompt-guide.md     # 💬 Prompt 调整
+│   ├── prompt-guide.md     # 💬 Prompt 调整
+│   └── troubleshooting.md   # ❓ 故障排除
+├── examples/               # 📚 示例配置
+│   └── qq-ollama-minimal/  # 最小配置示例
 ├── deployments/
 │   └── docker-compose.yml   # 🐳 Docker 部署
 └── Dockerfile
@@ -300,12 +326,14 @@ ai-robot/
 Phase 1 ✅ 工程骨架与核心接口
 Phase 2 ✅ QQ + Ollama MVP 闭环
 Phase 3 ✅ SQLite 持久化 + 命令 + Docker
+Phase 4 ✅ Setup UI + Doctor 环境检查
 
 未来计划
 ├── 🐳 Docker 部署优化
 ├── 💬 微信接入
 ├── 🔄 多模型支持
-└── 📊 管理员命令
+├── 📊 管理员命令
+└── 🎨 Prompt 可视化编辑
 ```
 
 ---
