@@ -1,0 +1,15 @@
+{
+  "name": "@ai-robot/llm-adapters",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ai-robot/core": "workspace:*",
+    "@ai-robot/logger": "workspace:*",
+    "@ai-robot/shared": "workspace:*"
+  }
+}
