@@ -34,7 +34,15 @@ function createLogger(level: LogLevel = 'info'): Logger {
   };
 }
 
-export const logger = createLogger(process.env.LOG_LEVEL as LogLevel || 'info');
+function getLogLevel(): LogLevel {
+  const env = process.env.LOG_LEVEL;
+  if (env === 'debug' || env === 'info' || env === 'warn' || env === 'error') {
+    return env;
+  }
+  return 'info';
+}
+
+export const logger = createLogger(getLogLevel());
 
 export function createLoggerWithPrefix(prefix: string): Logger {
   return {

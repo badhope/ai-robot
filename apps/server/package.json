@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
@@ -15,7 +15,9 @@
     "@ai-robot/im-adapters": "workspace:*",
     "@ai-robot/llm-adapters": "workspace:*",
     "@ai-robot/logger": "workspace:*",
-    "@ai-robot/storage": "workspace:*"
+    "@ai-robot/storage": "workspace:*",
+    "@ai-robot/wechat-adapter": "workspace:*",
+    "@ai-robot/ollama-adapter": "workspace:*"
   },
   "devDependencies": {
     "@ai-robot/shared": "workspace:*",

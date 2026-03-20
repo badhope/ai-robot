@@ -1,4 +1,4 @@
-import type { ChatMessageEvent, IMAdapter } from './im.js';
+import type { ChatMessageEvent } from './im.js';
 import type { LLMProvider } from './llm.js';
 
 export interface ProviderSelectionContext {

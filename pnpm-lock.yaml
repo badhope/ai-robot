@@ -6,7 +6,14 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.37
+      typescript:
+        specifier: ^5.3.0
+        version: 5.9.3
 
   apps/server:
     dependencies:
@@ -25,9 +32,15 @@ importers:
       '@ai-robot/logger':
         specifier: workspace:*
         version: link:../../packages/logger
+      '@ai-robot/ollama-adapter':
+        specifier: workspace:*
+        version: link:../../packages/ollama-adapter
       '@ai-robot/storage':
         specifier: workspace:*
         version: link:../../packages/storage
+      '@ai-robot/wechat-adapter':
+        specifier: workspace:*
+        version: link:../../packages/wechat-adapter
     devDependencies:
       '@ai-robot/shared':
         specifier: workspace:*
@@ -69,6 +82,15 @@ importers:
 
   packages/logger: {}
 
+  packages/ollama-adapter:
+    dependencies:
+      '@ai-robot/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ai-robot/logger':
+        specifier: workspace:*
+        version: link:../logger
+
   packages/shared: {}
 
   packages/storage:
@@ -76,6 +98,15 @@ importers:
       '@ai-robot/core':
         specifier: workspace:*
         version: link:../core
+
+  packages/wechat-adapter:
+    dependencies:
+      '@ai-robot/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ai-robot/logger':
+        specifier: workspace:*
+        version: link:../logger
 
 packages:
 
@@ -235,6 +266,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@types/node@20.19.37':
+    resolution: {integrity: sha512-8kzdPJ3FsNsVIurqBs7oodNnCEVbni9yUEkaHbgptDACOPW04jimGagZ51E6+lXUwJjgnBw+hyko/lkFWCldqw==}
+
   esbuild@0.27.4:
     resolution: {integrity: sha512-Rq4vbHnYkK5fws5NF7MYTU68FPRE1ajX7heQ/8QXXWqNgqqJ/GkmmyxIzUnf2Sr/bakf8l54716CcMGHYhMrrQ==}
     engines: {node: '>=18'}
@@ -260,6 +294,9 @@ packages:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
 snapshots:
 
@@ -341,6 +378,10 @@ snapshots:
   '@esbuild/win32-x64@0.27.4':
     optional: true
 
+  '@types/node@20.19.37':
+    dependencies:
+      undici-types: 6.21.0
+
   esbuild@0.27.4:
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.27.4
@@ -387,3 +428,5 @@ snapshots:
       fsevents: 2.3.3
 
   typescript@5.9.3: {}
+
+  undici-types@6.21.0: {}

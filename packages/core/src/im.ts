@@ -1,4 +1,4 @@
-export type Platform = 'wechat' | 'qq';
+export type Platform = 'wechat' | 'qq' | 'mock';
 
 export type ChatType = 'private' | 'group';
 

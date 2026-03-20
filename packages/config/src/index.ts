@@ -4,27 +4,33 @@ export interface AppConfig {
     host: string;
   };
   llm: {
-    defaultProvider: string;
-    providers: Record<string, {
-      type: 'ollama' | 'openai' | 'claude';
-      baseUrl?: string;
-      apiKey?: string;
-      model?: string;
-    }>;
+    defaultProvider: 'ollama' | 'mock';
+    providers: {
+      ollama?: {
+        baseUrl: string;
+        model: string;
+        timeout?: number;
+      };
+      mock?: Record<string, never>;
+    };
   };
   im: {
-    adapters: Array<{
-      platform: 'wechat' | 'qq';
-      enabled: boolean;
-      config?: Record<string, unknown>;
-    }>;
+    adapters: {
+      wechat?: {
+        enabled: boolean;
+        puppetToken?: string;
+      };
+    };
   };
   storage: {
-    type: 'memory' | 'redis';
-    redis?: {
-      host: string;
-      port: number;
-    };
+    type: 'memory';
+    maxMessages?: number;
+  };
+  chat: {
+    systemPrompt?: string;
+    privateAutoReply: boolean;
+    groupPrefix: string;
+    groupAiTrigger: 'at' | 'mention' | 'both';
   };
 }
 
@@ -34,14 +40,31 @@ export const defaultConfig: AppConfig = {
     host: '0.0.0.0',
   },
   llm: {
-    defaultProvider: 'mock',
-    providers: {},
+    defaultProvider: 'ollama',
+    providers: {
+      ollama: {
+        baseUrl: 'http://localhost:11434',
+        model: 'qwen2.5:7b',
+        timeout: 120000,
+      },
+    },
   },
   im: {
-    adapters: [],
+    adapters: {
+      wechat: {
+        enabled: true,
+      },
+    },
   },
   storage: {
     type: 'memory',
+    maxMessages: 20,
+  },
+  chat: {
+    systemPrompt: '你是一个有用的AI助手。',
+    privateAutoReply: true,
+    groupPrefix: '/ai',
+    groupAiTrigger: 'both',
   },
 };
 

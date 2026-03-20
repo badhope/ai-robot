@@ -1,5 +1,5 @@
 {
-  "name": "@ai-robot/shared",
+  "name": "@ai-robot/ollama-adapter",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,5 +9,9 @@
   },
   "scripts": {
     "build": "pnpm exec tsc"
+  },
+  "dependencies": {
+    "@ai-robot/core": "workspace:*",
+    "@ai-robot/logger": "workspace:*"
   }
 }
