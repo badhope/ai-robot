@@ -17,6 +17,7 @@
     "@ai-robot/logger": "workspace:*",
     "@ai-robot/qq-adapter": "workspace:*",
     "@ai-robot/storage": "workspace:*",
+    "@ai-robot/sqlite-storage": "workspace:*",
     "@ai-robot/wechat-adapter": "workspace:*",
     "@ai-robot/ollama-adapter": "workspace:*"
   },

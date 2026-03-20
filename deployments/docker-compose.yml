@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-robot-app
+    ports:
+      - "3000:3000"
+    environment:
+      - QQ_ENABLED=${QQ_ENABLED:-false}
+      - QQ_HTTP_PORT=${QQ_HTTP_PORT:-3001}
+      - QQ_WS_URL=${QQ_WS_URL:-ws://host.docker.internal:3001}
+      - QQ_NUMBER=${QQ_NUMBER:-}
+      - QQ_TOKEN=${QQ_TOKEN:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:7b}
+      - OLLAMA_TIMEOUT=${OLLAMA_TIMEOUT:-120000}
+      - SESSION_STORAGE=${SESSION_STORAGE:-sqlite}
+      - SQLITE_DB_PATH=/app/data/sessions.db
+      - SESSION_MAX_MESSAGES=${SESSION_MAX_MESSAGES:-100}
+      - CHAT_PREFIX=${CHAT_PREFIX:-/ai}
+      - PRIVATE_AUTO_REPLY=${PRIVATE_AUTO_REPLY:-true}
+      - GROUP_AI_TRIGGER=${GROUP_AI_TRIGGER:-both}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./data:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    network_mode: host

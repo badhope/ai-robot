@@ -2,3 +2,15 @@ node_modules/
 dist/
 .DS_Store
 *.log
+
+# SQLite database
+data/
+*.db
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/

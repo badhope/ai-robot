@@ -3,38 +3,50 @@ import { OllamaProvider } from '@ai-robot/ollama-adapter';
 import { MockIMAdapter } from '@ai-robot/im-adapters';
 import { MockLLMProvider } from '@ai-robot/llm-adapters';
 import { MemorySessionStore } from '@ai-robot/storage';
+import { SQLiteSessionStore } from '@ai-robot/sqlite-storage';
 import { logger } from '@ai-robot/logger';
 import { buildSessionId } from '@ai-robot/shared';
-import type { ChatMessageEvent, IMAdapter, LLMProvider } from '@ai-robot/core';
+import type { ChatMessageEvent, IMAdapter, LLMProvider, SessionStore } from '@ai-robot/core';
 import { shouldTriggerAI, cleanGroupMessage } from './trigger.js';
+import { handleCommand, isCommand } from './commands.js';
 import { loadConfig, type AppConfig } from '@ai-robot/config';
 
 interface ServerOptions {
   config?: AppConfig;
   adapter?: IMAdapter;
   provider?: LLMProvider;
+  sessionStore?: SessionStore;
 }
 
 class ChatServer {
   private adapter: IMAdapter;
   private llmProvider: LLMProvider;
-  private sessionStore: MemorySessionStore;
+  private sessionStore: SessionStore;
   private config: AppConfig;
 
   constructor(options: ServerOptions = {}) {
     this.config = options.config || loadConfig();
-    this.sessionStore = new MemorySessionStore({
-      maxMessages: this.config.storage.maxMessages || 20,
-    });
+
+    if (options.sessionStore) {
+      this.sessionStore = options.sessionStore;
+    } else if (this.config.session.storage === 'sqlite') {
+      this.sessionStore = new SQLiteSessionStore({
+        dbPath: this.config.session.sqlite.dbPath,
+        maxMessages: this.config.session.maxMessages,
+      });
+    } else {
+      this.sessionStore = new MemorySessionStore({
+        maxMessages: this.config.session.memory.maxMessages,
+      });
+    }
 
     if (options.provider) {
       this.llmProvider = options.provider;
-    } else if (this.config.llm.defaultProvider === 'ollama') {
-      const ollamaConfig = this.config.llm.providers.ollama;
+    } else if (this.config.llm.provider === 'ollama') {
       this.llmProvider = new OllamaProvider({
-        baseUrl: ollamaConfig?.baseUrl || 'http://localhost:11434',
-        model: ollamaConfig?.model || 'qwen2.5:7b',
-        timeout: ollamaConfig?.timeout || 120000,
+        baseUrl: this.config.llm.ollama.baseUrl,
+        model: this.config.llm.ollama.model,
+        timeout: this.config.llm.ollama.timeout,
       });
     } else {
       this.llmProvider = new MockLLMProvider();
@@ -42,12 +54,12 @@ class ChatServer {
 
     if (options.adapter) {
       this.adapter = options.adapter;
-    } else if (this.config.im.adapters.qq?.enabled) {
+    } else if (this.config.qq.enabled) {
       this.adapter = new NapCatQQAdapter({
-        httpPort: this.config.im.adapters.qq.httpPort,
-        wsUrl: this.config.im.adapters.qq.wsUrl,
-        qqNumber: this.config.im.adapters.qq.qqNumber,
-        token: this.config.im.adapters.qq.token,
+        httpPort: this.config.qq.httpPort,
+        wsUrl: this.config.qq.wsUrl,
+        qqNumber: this.config.qq.qqNumber,
+        token: this.config.qq.token,
       });
     } else {
       this.adapter = new MockIMAdapter();
@@ -56,72 +68,130 @@ class ChatServer {
 
   async start(): Promise<void> {
     logger.info('Starting Chat Server...');
+    logger.info(`QQ adapter: ${this.config.qq.enabled ? 'enabled' : 'disabled'}`);
+    logger.info(`LLM provider: ${this.config.llm.provider}`);
+    logger.info(`Session storage: ${this.config.session.storage}`);
 
     this.adapter.onMessage(this.handleMessage.bind(this));
-    await this.adapter.start();
+    
+    try {
+      await this.adapter.start();
+      logger.info('Adapter started successfully');
+    } catch (error) {
+      logger.error(`Failed to start adapter: ${error}`);
+      throw error;
+    }
+
+    try {
+      const healthOk = await this.llmProvider.healthCheck();
+      if (healthOk) {
+        logger.info('LLM provider health check passed');
+      } else {
+        logger.warn('LLM provider health check failed');
+      }
+    } catch (error) {
+      logger.warn(`LLM provider not available: ${error}`);
+    }
 
     logger.info('Chat Server started successfully');
   }
 
   async stop(): Promise<void> {
     await this.adapter.stop();
+    if (this.sessionStore && 'close' in this.sessionStore) {
+      (this.sessionStore as SQLiteSessionStore).close();
+    }
     logger.info('Chat Server stopped');
   }
 
   private async handleMessage(event: ChatMessageEvent): Promise<void> {
-    if (!shouldTriggerAI(event, this.config.chat)) {
-      logger.debug(`Message ignored: ${event.messageId}`);
+    const sessionId = buildSessionId(event.platform, event.roomId, event.senderId);
+    logger.debug(`[Message] ${event.messageId} from ${event.senderName}`);
+
+    const text = event.text.trim();
+    const isGroup = event.chatType === 'group';
+
+    if (isCommand(text)) {
+      const result = await handleCommand(event, {
+        sessionId,
+        clearSession: (id) => this.sessionStore.clearSession(id),
+        sendReply: (replyText) => this.adapter.sendReply(event, { text: replyText }),
+      });
+
+      if (result.handled) {
+        logger.info(`[Command] handled: ${text}`);
+        await this.adapter.sendReply(event, { text: result.response! });
+        return;
+      }
+    }
+
+    if (!shouldTriggerAI(event, this.config.trigger)) {
+      logger.debug(`[Trigger] message ignored: ${event.messageId}`);
       return;
     }
 
-    logger.info(`[Message] ${event.platform}:${event.chatType} from ${event.senderName}: ${event.text.substring(0, 50)}`);
+    logger.info(`[Trigger] AI activated for ${event.platform}:${event.chatType} from ${event.senderName}`);
 
-    let messageText = event.text;
-    if (event.chatType === 'group') {
-      messageText = cleanGroupMessage(event.text, this.config.chat);
+    let messageText = text;
+    if (isGroup) {
+      messageText = cleanGroupMessage(text, this.config.trigger);
     }
 
-    const sessionId = buildSessionId(event.platform, event.roomId, event.senderId);
     const history = await this.sessionStore.getSession(sessionId);
 
     const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [];
-    if (this.config.chat.systemPrompt) {
-      messages.push({ role: 'system', content: this.config.chat.systemPrompt });
-    }
     for (const msg of history) {
       messages.push({ role: msg.role, content: msg.content });
     }
     messages.push({ role: 'user', content: messageText });
 
     try {
+      logger.debug(`[LLM] generating response (${messages.length} messages in context)`);
       const response = await this.llmProvider.generate({ messages });
 
-      logger.info(`[AI Response] ${response.content.substring(0, 50)}...`);
+      logger.info(`[LLM] response received: ${response.content.substring(0, 50)}...`);
 
       await this.adapter.sendReply(event, { text: response.content });
 
       await this.sessionStore.appendMessage(sessionId, { role: 'user', content: messageText, timestamp: Date.now() });
       await this.sessionStore.appendMessage(sessionId, { role: 'assistant', content: response.content, timestamp: Date.now() });
     } catch (error) {
-      logger.error(`Error generating response: ${error}`);
-      await this.adapter.sendReply(event, { text: '抱歉，发生了错误。' });
+      logger.error(`[LLM] Error: ${error}`);
+      
+      let errorMessage = '抱歉，发生了错误。';
+      if (error instanceof Error) {
+        if (error.message.includes('fetch failed') || error.message.includes('ECONNREFUSED')) {
+          errorMessage = 'AI 服务暂时不可用，请稍后再试。';
+        } else if (error.message.includes('timeout')) {
+          errorMessage = 'AI 响应超时，请稍后再试。';
+        } else if (error.message.includes('model')) {
+          errorMessage = 'AI 模型配置错误。';
+        }
+      }
+      
+      await this.adapter.sendReply(event, { text: errorMessage });
     }
   }
 
   getProvider(): LLMProvider {
     return this.llmProvider;
   }
+
+  getSessionStore(): SessionStore {
+    return this.sessionStore;
+  }
 }
 
 async function main() {
   const config = loadConfig();
 
-  logger.info('Initializing Chat Server with config:', {
-    provider: config.llm.defaultProvider,
-    model: config.llm.providers.ollama?.model,
-    storage: config.storage.type,
-    qqEnabled: config.im.adapters.qq?.enabled,
-  });
+  logger.info('='.repeat(50));
+  logger.info('AI Robot Server v0.1.0');
+  logger.info('='.repeat(50));
+
+  if (!config.qq.enabled && config.llm.provider === 'mock') {
+    logger.warn('Warning: Both QQ and LLM provider are disabled. Server will run in mock mode.');
+  }
 
   const server = new ChatServer({ config });
 
@@ -131,11 +201,23 @@ async function main() {
     process.exit(0);
   });
 
-  await server.start();
+  process.on('unhandledRejection', (reason) => {
+    logger.error(`Unhandled rejection: ${reason}`);
+  });
+
+  try {
+    await server.start();
+  } catch (error) {
+    logger.error(`Failed to start server: ${error}`);
+    process.exit(1);
+  }
 }
 
 export { ChatServer, main, type ServerOptions };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(console.error);
+  main().catch((error) => {
+    logger.error(`Fatal error: ${error}`);
+    process.exit(1);
+  });
 }
