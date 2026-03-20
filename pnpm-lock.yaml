@@ -35,6 +35,9 @@ importers:
       '@ai-robot/ollama-adapter':
         specifier: workspace:*
         version: link:../../packages/ollama-adapter
+      '@ai-robot/qq-adapter':
+        specifier: workspace:*
+        version: link:../../packages/qq-adapter
       '@ai-robot/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -90,6 +93,18 @@ importers:
       '@ai-robot/logger':
         specifier: workspace:*
         version: link:../logger
+
+  packages/qq-adapter:
+    dependencies:
+      '@ai-robot/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ai-robot/logger':
+        specifier: workspace:*
+        version: link:../logger
+      '@ai-robot/shared':
+        specifier: workspace:*
+        version: link:../shared
 
   packages/shared: {}
 

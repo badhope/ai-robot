@@ -15,6 +15,7 @@
     "@ai-robot/im-adapters": "workspace:*",
     "@ai-robot/llm-adapters": "workspace:*",
     "@ai-robot/logger": "workspace:*",
+    "@ai-robot/qq-adapter": "workspace:*",
     "@ai-robot/storage": "workspace:*",
     "@ai-robot/wechat-adapter": "workspace:*",
     "@ai-robot/ollama-adapter": "workspace:*"
