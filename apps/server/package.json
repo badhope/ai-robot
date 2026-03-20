@@ -10,6 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@ai-robot/alibaba-adapter": "workspace:*",
     "@ai-robot/config": "workspace:*",
     "@ai-robot/core": "workspace:*",
     "@ai-robot/im-adapters": "workspace:*",

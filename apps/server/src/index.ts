@@ -1,5 +1,6 @@
 import { NapCatQQAdapter } from '@ai-robot/qq-adapter';
 import { OllamaProvider } from '@ai-robot/ollama-adapter';
+import { AlibabaProvider } from '@ai-robot/alibaba-adapter';
 import { MockIMAdapter } from '@ai-robot/im-adapters';
 import { MockLLMProvider } from '@ai-robot/llm-adapters';
 import { MemorySessionStore } from '@ai-robot/storage';
@@ -42,6 +43,13 @@ class ChatServer {
 
     if (options.provider) {
       this.llmProvider = options.provider;
+    } else if (this.config.llm.provider === 'alibaba') {
+      this.llmProvider = new AlibabaProvider({
+        apiKey: this.config.llm.alibaba.apiKey,
+        baseUrl: this.config.llm.alibaba.baseUrl,
+        model: this.config.llm.alibaba.model,
+        timeout: this.config.llm.alibaba.timeout,
+      });
     } else if (this.config.llm.provider === 'ollama') {
       this.llmProvider = new OllamaProvider({
         baseUrl: this.config.llm.ollama.baseUrl,

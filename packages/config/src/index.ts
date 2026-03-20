@@ -11,7 +11,13 @@ export interface AppConfig {
     token?: string;
   };
   llm: {
-    provider: 'ollama' | 'mock';
+    provider: 'alibaba' | 'ollama' | 'mock';
+    alibaba: {
+      apiKey: string;
+      baseUrl: string;
+      model: string;
+      timeout: number;
+    };
     ollama: {
       baseUrl: string;
       model: string;
@@ -50,7 +56,13 @@ export const defaultConfig: AppConfig = {
     wsUrl: 'ws://localhost:3001',
   },
   llm: {
-    provider: 'ollama',
+    provider: 'alibaba',
+    alibaba: {
+      apiKey: '',
+      baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+      model: 'qwen-plus',
+      timeout: 120000,
+    },
     ollama: {
       baseUrl: 'http://localhost:11434',
       model: 'qwen2.5:7b',
@@ -102,10 +114,14 @@ export function loadConfig(): AppConfig {
   if (process.env.QQ_TOKEN) config.qq.token = process.env.QQ_TOKEN;
 
   if (process.env.LLM_PROVIDER) {
-    if (process.env.LLM_PROVIDER === 'ollama' || process.env.LLM_PROVIDER === 'mock') {
+    if (process.env.LLM_PROVIDER === 'alibaba' || process.env.LLM_PROVIDER === 'ollama' || process.env.LLM_PROVIDER === 'mock') {
       config.llm.provider = process.env.LLM_PROVIDER;
     }
   }
+  if (process.env.ALIBABA_API_KEY) config.llm.alibaba.apiKey = process.env.ALIBABA_API_KEY;
+  if (process.env.ALIBABA_BASE_URL) config.llm.alibaba.baseUrl = process.env.ALIBABA_BASE_URL;
+  if (process.env.ALIBABA_MODEL) config.llm.alibaba.model = process.env.ALIBABA_MODEL;
+  if (process.env.ALIBABA_TIMEOUT) config.llm.alibaba.timeout = parseEnvInt(process.env.ALIBABA_TIMEOUT, 120000);
   if (process.env.OLLAMA_BASE_URL) config.llm.ollama.baseUrl = process.env.OLLAMA_BASE_URL;
   if (process.env.OLLAMA_MODEL) config.llm.ollama.model = process.env.OLLAMA_MODEL;
   if (process.env.OLLAMA_TIMEOUT) config.llm.ollama.timeout = parseEnvInt(process.env.OLLAMA_TIMEOUT, 120000);

@@ -10,6 +10,8 @@ export interface CheckResult {
 export interface DoctorReport {
   os: CheckResult;
   node: CheckResult;
+  alibaba: CheckResult;
+  alibabaModel: CheckResult;
   ollama: CheckResult;
   ollamaModel: CheckResult;
   napcatqq: CheckResult;
@@ -20,11 +22,17 @@ export class Doctor {
   private results: Map<string, CheckResult> = new Map();
 
   async checkAll(config: {
+    alibabaApiKey?: string;
+    alibabaBaseUrl?: string;
+    alibabaModel?: string;
     ollamaBaseUrl?: string;
     ollamaModel?: string;
     napcatqqWsUrl?: string;
   }): Promise<DoctorReport> {
     const {
+      alibabaApiKey = '',
+      alibabaBaseUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+      alibabaModel = 'qwen-plus',
       ollamaBaseUrl = 'http://localhost:11434',
       ollamaModel = 'qwen2.5:7b',
       napcatqqWsUrl = 'ws://localhost:3001',
@@ -33,6 +41,8 @@ export class Doctor {
     await Promise.all([
       this.checkOS(),
       this.checkNode(),
+      this.checkAlibaba(alibabaBaseUrl, alibabaApiKey),
+      this.checkAlibabaModel(alibabaBaseUrl, alibabaApiKey, alibabaModel),
       this.checkOllama(ollamaBaseUrl),
       this.checkOllamaModel(ollamaBaseUrl, ollamaModel),
       this.checkNapCatQQ(napcatqqWsUrl),
@@ -42,6 +52,8 @@ export class Doctor {
     return {
       os: this.results.get('os')!,
       node: this.results.get('node')!,
+      alibaba: this.results.get('alibaba')!,
+      alibabaModel: this.results.get('alibabaModel')!,
       ollama: this.results.get('ollama')!,
       ollamaModel: this.results.get('ollamaModel')!,
       napcatqq: this.results.get('napcatqq')!,
@@ -178,9 +190,111 @@ export class Doctor {
     });
   }
 
+  private async checkAlibaba(baseUrl: string, apiKey: string): Promise<void> {
+    if (!apiKey) {
+      this.results.set('alibaba', {
+        name: '阿里云/通义 API',
+        status: 'warn',
+        message: '阿里云 API: ⚠️ 未配置 API Key',
+        hint: '请在 .env 中设置 ALIBABA_API_KEY',
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${baseUrl}/chat/completions`,
+        {
+          model: 'qwen-plus',
+          messages: [{ role: 'user', content: 'Hi' }],
+          max_tokens: 10,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+          timeout: 10000,
+        }
+      );
+
+      if (response.status === 200) {
+        this.results.set('alibaba', {
+          name: '阿里云/通义 API',
+          status: 'pass',
+          message: `阿里云 API: ✅ 连接正常`,
+        });
+      } else {
+        this.results.set('alibaba', {
+          name: '阿里云/通义 API',
+          status: 'fail',
+          message: `阿里云 API: ⚠️ 状态异常 (${response.status})`,
+        });
+      }
+    } catch (error) {
+      this.results.set('alibaba', {
+        name: '阿里云/通义 API',
+        status: 'fail',
+        message: `阿里云 API: ❌ 连接失败`,
+        hint: '请检查 API Key 是否有效，或网络是否正常',
+      });
+    }
+  }
+
+  private async checkAlibabaModel(baseUrl: string, apiKey: string, model: string): Promise<void> {
+    if (!apiKey) {
+      this.results.set('alibabaModel', {
+        name: '通义模型',
+        status: 'warn',
+        message: `模型: ⚠️ 无法检查 (API Key 未配置)`,
+        hint: '请先配置 ALIBABA_API_KEY',
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${baseUrl}/chat/completions`,
+        {
+          model: model,
+          messages: [{ role: 'user', content: 'Hi' }],
+          max_tokens: 10,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+          },
+          timeout: 10000,
+        }
+      );
+
+      if (response.status === 200) {
+        this.results.set('alibabaModel', {
+          name: '通义模型',
+          status: 'pass',
+          message: `模型 ${model}: ✅ 可用`,
+        });
+      } else {
+        this.results.set('alibabaModel', {
+          name: '通义模型',
+          status: 'fail',
+          message: `模型 ${model}: ⚠️ 状态异常`,
+        });
+      }
+    } catch (error) {
+      this.results.set('alibabaModel', {
+        name: '通义模型',
+        status: 'fail',
+        message: `模型 ${model}: ❌ 无法使用`,
+        hint: '请检查模型名称是否正确，或 API Key 是否有权限',
+      });
+    }
+  }
+
   private async checkNetwork(): Promise<void> {
     try {
-      await axios.get('https://ollama.com', { timeout: 5000 });
+      await axios.get('https://www.aliyun.com', { timeout: 5000 });
       this.results.set('network', {
         name: 'Network',
         status: 'pass',
@@ -191,7 +305,7 @@ export class Doctor {
         name: 'Network',
         status: 'warn',
         message: '网络: ⚠️ 无法访问外网',
-        hint: '仅影响模型下载，不影响已下载模型的运行',
+        hint: '仅影响 API 调用，不影响本地服务运行',
       });
     }
   }
@@ -203,6 +317,8 @@ export class Doctor {
     const checks = [
       report.os,
       report.node,
+      report.alibaba,
+      report.alibabaModel,
       report.ollama,
       report.ollamaModel,
       report.napcatqq,
@@ -237,6 +353,9 @@ export class Doctor {
 export const doctor = new Doctor();
 
 export async function runDoctorCheck(config?: {
+  alibabaApiKey?: string;
+  alibabaBaseUrl?: string;
+  alibabaModel?: string;
   ollamaBaseUrl?: string;
   ollamaModel?: string;
   napcatqqWsUrl?: string;

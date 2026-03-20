@@ -10,23 +10,24 @@
 ║  ██║  ██║██║███████║██╔╝ ██╗██╔╝ ██╗   ██╗                   ║
 ║  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝                   ║
 ║                                                                  ║
-║            🤖 Local AI Robot for QQ Groups 🤖                    ║
+║        🤖 QQ 群聊 AI 机器人 · 阿里云/通义 API 主线 🤖              ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-**在 QQ 群里调戏本地 AI 机器人**
+**在 QQ 群里调戏 AI 机器人 —— 默认接入阿里云/通义 API，无需本地 GPU**
 
-一个轻量级的自托管 AI 聊天机器人，专为 QQ 群聊设计。无需云服务，无需 API Key，让你的群友与本地运行的 AI 直接对话。
+一个轻量级的自托管 AI 聊天机器人，专为 QQ 群聊设计。默认使用阿里云/通义 API，无需本地 GPU，开箱即用。
 
 ---
 
 [![Node.js Version](https://img.shields.io/badge/node-18%2B-green?style=for-the-badge&logo=node.js)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/typescript-5.3-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge&logo=git)](LICENSE)
-[![Ollama](https://img.shields.io/badge/Ollama-Local%20AI-purple?style=for-the-badge&logo=anthropic)](https://ollama.com)
-[![Qwen](https://img.shields.io/badge/Qwen-2.5%20Model-ff6b6b?style=for-the-badge&logo=alibaba)](https://github.com/QwenLM)
+[![Alibaba](https://img.shields.io/badge/DashScope-API%20First-ff6b6b?style=for-the-badge&logo=alibaba)](https://help.aliyun.com/zh/dashscope)
+[![Qwen](https://img.shields.io/badge/Qwen-Plus%20Model-20220712?style=for-the-badge&logo=alibaba)](https://github.com/QwenLM)
 [![NapCatQQ](https://img.shields.io/badge/NapCatQQ-QQ%20Adapter-12defa?style=for-the-badge&logo=TencentQQ)](https://github.com/NapNeko/NapCatQQ)
+[![Ollama](https://img.shields.io/badge/Ollama-Local%20(Optional)-purple?style=for-the-badge&logo=anthropic)](https://ollama.com)
 
 ---
 
@@ -86,31 +87,25 @@
 │                     🚀 3 步快速启动                             │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
-│  ① 安装 Ollama          ② 启动 NapCatQQ       ③ 启动机器人     │
+│  ① 配置阿里云 API      ② 启动 NapCatQQ       ③ 启动机器人     │
 │  ─────────────          ─────────────         ─────────────     │
-│  ollama serve           NapCatQQ 运行         pnpm dev         │
-│  ollama pull qwen2.5    扫码登录 QQ           @机器人 测试     │
+│  获取 API Key          NapCatQQ 运行         pnpm dev         │
+│  填入 .env             扫码登录 QQ           @机器人 测试     │
 │                                                                │
-│  ⏱️ ~5 分钟              ⏱️ ~3 分钟            ⏱️ ~1 分钟        │
+│  ⏱️ ~2 分钟              ⏱️ ~3 分钟            ⏱️ ~1 分钟        │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### 第一步：安装 Ollama 并下载模型
+### 第一步：获取阿里云/通义 API Key
+
+1. 注册 [阿里云百炼](https://bailian.console.aliyun.com/)
+2. 开通 DashScope 服务
+3. 创建 API Key
 
 ```bash
-# macOS / Linux
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Windows: 从 https://ollama.com 下载安装
-
-# 启动 Ollama
-ollama serve
-
-# 下载推荐模型（约 4GB）
-ollama pull qwen2.5:7b
+# 在 .env 中配置
+ALIBABA_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
-
-✅ **验证**：`ollama list` 能看到 qwen2.5:7b
 
 ### 第二步：启动 NapCatQQ
 
@@ -131,12 +126,33 @@ pnpm install
 # 配置
 cp .env.example .env
 # 修改 QQ_ENABLED=true
+# 填入 ALIBABA_API_KEY
 
 # 启动
 pnpm dev
 ```
 
 🎉 **验证**：在群里发送 `@你的机器人 你好`
+
+---
+
+### 💡 可选：使用本地模型（需要 GPU）
+
+如果你有 NVIDIA 显卡，可以切换到本地 Ollama 模型：
+
+```env
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen2.5:7b
+```
+
+然后安装 Ollama：
+
+```bash
+# 下载 Ollama
+ollama pull qwen2.5:7b
+ollama serve
+```
 
 ### 🎯 Setup UI 控制台（可选）
 
@@ -162,9 +178,15 @@ pnpm start
 QQ_ENABLED=true                    # 开启 QQ 机器人
 QQ_WS_URL=ws://localhost:3001     # NapCatQQ 地址
 
-# ──────────── AI 模型 ────────────
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen2.5:7b
+# ──────────── AI 模型 (默认: 阿里云/通义 API) ────────────
+LLM_PROVIDER=alibaba              # alibaba | ollama | mock
+ALIBABA_API_KEY=sk-xxxxxxxxxx     # 阿里云 API Key
+ALIBABA_MODEL=qwen-plus           # 通义模型
+
+# ──────────── 本地模型 (可选) ────────────
+# LLM_PROVIDER=ollama
+# OLLAMA_BASE_URL=http://localhost:11434
+# OLLAMA_MODEL=qwen2.5:7b
 
 # ──────────── 会话存储 ────────────
 SESSION_STORAGE=sqlite             # 持久化存储
@@ -179,7 +201,9 @@ PRIVATE_AUTO_REPLY=true           # 私聊自动回复
 | 配置项 | 默认值 | 说明 |
 |--------|--------|------|
 | `QQ_ENABLED` | false | 是否启用 QQ |
-| `OLLAMA_MODEL` | qwen2.5:7b | 模型名称 |
+| `LLM_PROVIDER` | alibaba | AI 提供者 (alibaba/ollama/mock) |
+| `ALIBABA_API_KEY` | - | 阿里云 API Key (主线) |
+| `OLLAMA_MODEL` | qwen2.5:7b | 本地模型名称 (可选) |
 | `SESSION_MAX_MESSAGES` | 100 | 记住多少条历史 |
 | `GROUP_AI_TRIGGER` | both | at / mention / both |
 
@@ -195,16 +219,23 @@ PRIVATE_AUTO_REPLY=true           # 私聊自动回复
                            │ WebSocket
                            ▼
 ┌──────────┐      ┌─────────────────┐      ┌─────────────────┐
-│   QQ     │◀────▶│   AI Robot      │◀────▶│     Ollama      │
-│   群友   │      │   (Node.js)     │      │   (本地模型)     │
+│   QQ     │◀────▶│   AI Robot      │◀────▶│  阿里云/通义 API │
+│   群友   │      │   (Node.js)     │      │   (云端模型)     │
 └──────────┘      └─────────────────┘      └─────────────────┘
+                                          或 (可选)
+                                          ┌─────────────────┐
+                                          │     Ollama      │
+                                          │   (本地模型)     │
+                                          └─────────────────┘
 ```
 
 1. 群友在 QQ 群 @机器人 发消息
 2. NapCatQQ 通过 WebSocket 转发给 AI Robot
-3. AI Robot 构造 Prompt，调用 Ollama
-4. Ollama 用本地 Qwen 模型生成回复
+3. AI Robot 构造 Prompt，调用阿里云/通义 API
+4. 通义模型生成回复
 5. AI Robot 把回复发回 QQ 群
+
+> 💡 **本地模型可选**：配置 `LLM_PROVIDER=ollama` 即可切换到本地 Ollama
 
 ---
 
