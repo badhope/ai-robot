@@ -107,7 +107,7 @@ export function loadConfig(): AppConfig {
   if (process.env.APP_HOST) config.app.host = process.env.APP_HOST;
   if (process.env.APP_PORT) config.app.port = parseEnvInt(process.env.APP_PORT, 3000);
 
-  config.qq.enabled = parseEnvBool(process.env.QQ_ENABLED, false);
+  config.qq.enabled = parseEnvBool(process.env.QQ_ENABLED, true);
   if (process.env.QQ_HTTP_PORT) config.qq.httpPort = parseEnvInt(process.env.QQ_HTTP_PORT, 3001);
   if (process.env.QQ_WS_URL) config.qq.wsUrl = process.env.QQ_WS_URL;
   if (process.env.QQ_NUMBER) config.qq.qqNumber = process.env.QQ_NUMBER;

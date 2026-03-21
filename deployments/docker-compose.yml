@@ -7,7 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - QQ_ENABLED=${QQ_ENABLED:-false}
+      - QQ_ENABLED=${QQ_ENABLED:-true}
       - QQ_HTTP_PORT=${QQ_HTTP_PORT:-3001}
       - QQ_WS_URL=${QQ_WS_URL:-ws://host.docker.internal:3001}
       - QQ_NUMBER=${QQ_NUMBER:-}

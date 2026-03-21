@@ -1,4 +1,6 @@
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 
 export interface CheckResult {
   name: string;
@@ -15,6 +17,7 @@ export interface DoctorReport {
   ollama: CheckResult;
   ollamaModel: CheckResult;
   napcatqq: CheckResult;
+  sqlite: CheckResult;
   network: CheckResult;
 }
 
@@ -28,6 +31,7 @@ export class Doctor {
     ollamaBaseUrl?: string;
     ollamaModel?: string;
     napcatqqWsUrl?: string;
+    sqliteDbPath?: string;
   }): Promise<DoctorReport> {
     const {
       alibabaApiKey = '',
@@ -36,6 +40,7 @@ export class Doctor {
       ollamaBaseUrl = 'http://localhost:11434',
       ollamaModel = 'qwen2.5:7b',
       napcatqqWsUrl = 'ws://localhost:3001',
+      sqliteDbPath = './data/sessions.db',
     } = config;
 
     await Promise.all([
@@ -46,6 +51,7 @@ export class Doctor {
       this.checkOllama(ollamaBaseUrl),
       this.checkOllamaModel(ollamaBaseUrl, ollamaModel),
       this.checkNapCatQQ(napcatqqWsUrl),
+      this.checkSQLite(sqliteDbPath),
       this.checkNetwork(),
     ]);
 
@@ -57,6 +63,7 @@ export class Doctor {
       ollama: this.results.get('ollama')!,
       ollamaModel: this.results.get('ollamaModel')!,
       napcatqq: this.results.get('napcatqq')!,
+      sqlite: this.results.get('sqlite')!,
       network: this.results.get('network')!,
     };
   }
@@ -310,6 +317,32 @@ export class Doctor {
     }
   }
 
+  private async checkSQLite(dbPath: string): Promise<void> {
+    try {
+      const resolvedPath = path.resolve(dbPath);
+      if (fs.existsSync(resolvedPath)) {
+        this.results.set('sqlite', {
+          name: 'SQLite',
+          status: 'pass',
+          message: 'SQLite: ✅ 数据库文件已就绪',
+        });
+      } else {
+        this.results.set('sqlite', {
+          name: 'SQLite',
+          status: 'warn',
+          message: 'SQLite: ⚠️ 数据库文件不存在',
+          hint: '运行 pnpm setup 自动创建，或确保 ./data 目录存在',
+        });
+      }
+    } catch {
+      this.results.set('sqlite', {
+        name: 'SQLite',
+        status: 'fail',
+        message: 'SQLite: ❌ 无法检查数据库状态',
+      });
+    }
+  }
+
   printReport(report: DoctorReport): void {
     console.log('\n🩺 AI Robot 环境检查\n');
     console.log('═'.repeat(60));
@@ -322,6 +355,7 @@ export class Doctor {
       report.ollama,
       report.ollamaModel,
       report.napcatqq,
+      report.sqlite,
       report.network,
     ];
 
@@ -359,6 +393,7 @@ export async function runDoctorCheck(config?: {
   ollamaBaseUrl?: string;
   ollamaModel?: string;
   napcatqqWsUrl?: string;
+  sqliteDbPath?: string;
 }): Promise<DoctorReport> {
   const report = await doctor.checkAll(config || {});
   doctor.printReport(report);

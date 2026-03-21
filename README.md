@@ -1,5 +1,7 @@
 # 🤖 AI Robot
 
+<div align="center">
+
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
@@ -7,7 +9,7 @@
 ║  ██╔══██╗██║██╔════╝╚██╗██╔╝╚██╗██╔╝   ██║                   ║
 ║  ███████║██║███████╗ ╚███╔╝  ╚███╔╝    ██║                   ║
 ║  ██╔══██║██║╚════██║ ██╔██╗  ██╔██╗    ╚═╝                   ║
-║  ██║  ██║██║███████║██╔╝ ██╗██╔╝ ██╗   ██╗                   ║
+║  ██║  ██║██║███████║██╔╝ ██╗██╔╝ ██╗   ██║                   ║
 ║  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝                   ║
 ║                                                                  ║
 ║        🤖 QQ 群聊 AI 机器人 · 阿里云/通义 API 主线 🤖              ║
@@ -15,19 +17,15 @@
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-**在 QQ 群里调戏 AI 机器人 —— 默认接入阿里云/通义 API，无需本地 GPU**
+**🚀 v1.20 正式版 · 默认阿里云/通义 API · 无需 GPU · 开箱即用**
 
-一个轻量级的自托管 AI 聊天机器人，专为 QQ 群聊设计。默认使用阿里云/通义 API，无需本地 GPU，开箱即用。
+[![Node.js Version](https://img.shields.io/badge/node-18%2B-green?style=flat-square&logo=node.js)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.3-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![License](https://img.shields.io/badge/license-MIT-yellow?style=flat-square&logo=git)](LICENSE)
+[![Alibaba](https://img.shields.io/badge/DashScope-API%20First-ff6b6b?style=flat-square&logo=alibaba)](https://help.aliyun.com/zh/dashscope)
+[![NapCatQQ](https://img.shields.io/badge/NapCatQQ-QQ%20Adapter-12defa?style=flat-square&logo=TencentQQ)](https://github.com/NapNeko/NapCatQQ)
 
----
-
-[![Node.js Version](https://img.shields.io/badge/node-18%2B-green?style=for-the-badge&logo=node.js)](https://nodejs.org)
-[![TypeScript](https://img.shields.io/badge/typescript-5.3-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
-[![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge&logo=git)](LICENSE)
-[![Alibaba](https://img.shields.io/badge/DashScope-API%20First-ff6b6b?style=for-the-badge&logo=alibaba)](https://help.aliyun.com/zh/dashscope)
-[![Qwen](https://img.shields.io/badge/Qwen-Plus%20Model-20220712?style=for-the-badge&logo=alibaba)](https://github.com/QwenLM)
-[![NapCatQQ](https://img.shields.io/badge/NapCatQQ-QQ%20Adapter-12defa?style=for-the-badge&logo=TencentQQ)](https://github.com/NapNeko/NapCatQQ)
-[![Ollama](https://img.shields.io/badge/Ollama-Local%20(Optional)-purple?style=for-the-badge&logo=anthropic)](https://ollama.com)
+</div>
 
 ---
 
@@ -42,8 +40,6 @@
 | 🧹 **/ai clear** | 清空当前会话，重新开始 |
 | 📖 **/ai help** | 查看帮助信息 |
 
-> 🚀 **3 分钟部署，5 分钟跑通** —— 比想象中简单得多
-
 ---
 
 ## 🎯 效果演示
@@ -57,22 +53,12 @@
 ├─────────────────────────────────────────────────────────────┤
 │ [小明] @AIRobot 你好，请介绍一下自己                         │
 │                                                             │
-│ [AIRobot] 你好！👋 我是基于 Qwen2.5 模型运行的本地 AI 助手   │
+│ [AIRobot] 你好！👋 我是基于 Qwen2.5 模型运行的 AI 助手      │
 │                                                             │
 │ 我的特点是：                                                 │
-│ • 完全离线运行，不依赖任何外部 API                           │
-│ • 响应速度快，所有推理都在本地完成                           │
+│ • 默认使用阿里云/通义 API，响应快速                          │
+│ • 支持上下文记忆，会话连贯                                   │
 │ • 完全开源，你可以随意修改和部署                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ 私聊                                                        │
-├─────────────────────────────────────────────────────────────┤
-│ [小李] 你好                                                  │
-│                                                             │
-│ [AIRobot] 你好！有什么我可以帮你的吗？😊                     │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -80,30 +66,30 @@
 
 ---
 
-## ⚡ 快速开始
+## 🚀 快速开始（API 模式 - 默认推荐）
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                     🚀 3 步快速启动                             │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
-│  ① 配置阿里云 API      ② 启动 NapCatQQ       ③ 启动机器人     │
-│  ─────────────          ─────────────         ─────────────     │
-│  获取 API Key          NapCatQQ 运行         pnpm dev         │
-│  填入 .env             扫码登录 QQ           @机器人 测试     │
+│  ① 获取 API Key      ② 启动 NapCatQQ       ③ 启动机器人       │
+│  ─────────────        ─────────────          ─────────────      │
+│  阿里云百炼           NapCatQQ 运行          pnpm dev           │
+│  ~2 分钟              ~3 分钟                ~1 分钟           │
 │                                                                │
-│  ⏱️ ~2 分钟              ⏱️ ~3 分钟            ⏱️ ~1 分钟        │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### 第一步：获取阿里云/通义 API Key
+### 第一步：获取阿里云 API Key
 
-1. 注册 [阿里云百炼](https://bailian.console.aliyun.com/)
-2. 开通 DashScope 服务
-3. 创建 API Key
+1. 打开 [阿里云百炼](https://bailian.console.aliyun.com/)
+2. 注册并登录
+3. 开通 DashScope 服务
+4. 创建 API Key
 
 ```bash
-# 在 .env 中配置
+# 配置到 .env 文件
 ALIBABA_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
@@ -123,20 +109,43 @@ git clone https://github.com/badhope/ai-robot.git
 cd ai-robot
 pnpm install
 
-# 配置
+# 自动配置（推荐）
+pnpm setup
+
+# 或手动配置
 cp .env.example .env
-# 修改 QQ_ENABLED=true
-# 填入 ALIBABA_API_KEY
+# 修改 .env 中的 ALIBABA_API_KEY
 
 # 启动
 pnpm dev
+
+# 打开控制台查看状态
+# http://localhost:3002
 ```
 
 🎉 **验证**：在群里发送 `@你的机器人 你好`
 
 ---
 
-### 💡 可选：使用本地模型（需要 GPU）
+## 🔍 环境检测
+
+项目提供了自动环境检测功能：
+
+```bash
+# 检查环境状态
+pnpm doctor
+```
+
+检测内容包括：
+- Node.js 版本
+- 配置文件状态
+- 阿里云 API 连接
+- NapCatQQ 连接
+- SQLite 数据库
+
+---
+
+## 💡 可选：使用本地模型（需要 GPU）
 
 如果你有 NVIDIA 显卡，可以切换到本地 Ollama 模型：
 
@@ -146,238 +155,76 @@ OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=qwen2.5:7b
 ```
 
-然后安装 Ollama：
-
 ```bash
-# 下载 Ollama
+# 安装 Ollama: https://ollama.com
 ollama pull qwen2.5:7b
 ollama serve
 ```
 
-### 🎯 Setup UI 控制台（可选）
-
-启动本地控制台，查看系统状态：
-
-```bash
-cd apps/setup-ui
-pnpm start
-# 打开 http://localhost:3002
-```
-
-控制台功能：
-- 📊 查看系统状态（Ollama、NapCatQQ、模型）
-- 💬 查看 Prompt 预设
-- 🚀 下一步操作引导
+> ⚠️ 本地模式需要：
+> - NVIDIA 显卡（建议 6GB+ 显存）
+> - 安装并运行 Ollama
+> - 下载模型文件
 
 ---
 
-## 🔧 配置说明
+## 📚 文档
 
-```env
-# ──────────── QQ 设置 ────────────
-QQ_ENABLED=true                    # 开启 QQ 机器人
-QQ_WS_URL=ws://localhost:3001     # NapCatQQ 地址
-
-# ──────────── AI 模型 (默认: 阿里云/通义 API) ────────────
-LLM_PROVIDER=alibaba              # alibaba | ollama | mock
-ALIBABA_API_KEY=sk-xxxxxxxxxx     # 阿里云 API Key
-ALIBABA_MODEL=qwen-plus           # 通义模型
-
-# ──────────── 本地模型 (可选) ────────────
-# LLM_PROVIDER=ollama
-# OLLAMA_BASE_URL=http://localhost:11434
-# OLLAMA_MODEL=qwen2.5:7b
-
-# ──────────── 会话存储 ────────────
-SESSION_STORAGE=sqlite             # 持久化存储
-SESSION_MAX_MESSAGES=100          # 上下文窗口
-
-# ──────────── 触发规则 ────────────
-CHAT_PREFIX=/ai                   # 命令前缀
-GROUP_AI_TRIGGER=both             # both=@或/ai都触发
-PRIVATE_AUTO_REPLY=true           # 私聊自动回复
-```
-
-| 配置项 | 默认值 | 说明 |
-|--------|--------|------|
-| `QQ_ENABLED` | false | 是否启用 QQ |
-| `LLM_PROVIDER` | alibaba | AI 提供者 (alibaba/ollama/mock) |
-| `ALIBABA_API_KEY` | - | 阿里云 API Key (主线) |
-| `OLLAMA_MODEL` | qwen2.5:7b | 本地模型名称 (可选) |
-| `SESSION_MAX_MESSAGES` | 100 | 记住多少条历史 |
-| `GROUP_AI_TRIGGER` | both | at / mention / both |
+| 文档 | 说明 |
+|------|------|
+| [快速开始](docs/quick-start-qq.md) | 5 分钟快速上手 |
+| [部署指南](docs/deployment.md) | 详细部署说明 |
+| [Prompt 指南](docs/prompt-guide.md) | 机器人风格配置 |
+| [常见问题](docs/faq.md) | FAQ |
+| [故障排查](docs/troubleshooting.md) | 问题排查 |
+| [架构文档](docs/architecture.md) | 开发者架构说明 |
+| [AI 扩展指南](docs/ai-extension-guide.md) | AI 扩展者指南 |
 
 ---
 
-## 📖 工作原理
-
-```
-                    ┌─────────────┐
-                    │   NapCatQQ  │
-                    │  (QQ客户端) │
-                    └──────┬──────┘
-                           │ WebSocket
-                           ▼
-┌──────────┐      ┌─────────────────┐      ┌─────────────────┐
-│   QQ     │◀────▶│   AI Robot      │◀────▶│  阿里云/通义 API │
-│   群友   │      │   (Node.js)     │      │   (云端模型)     │
-└──────────┘      └─────────────────┘      └─────────────────┘
-                                          或 (可选)
-                                          ┌─────────────────┐
-                                          │     Ollama      │
-                                          │   (本地模型)     │
-                                          └─────────────────┘
-```
-
-1. 群友在 QQ 群 @机器人 发消息
-2. NapCatQQ 通过 WebSocket 转发给 AI Robot
-3. AI Robot 构造 Prompt，调用阿里云/通义 API
-4. 通义模型生成回复
-5. AI Robot 把回复发回 QQ 群
-
-> 💡 **本地模型可选**：配置 `LLM_PROVIDER=ollama` 即可切换到本地 Ollama
-
----
-
-## 🤖 内置命令
-
-| 命令 | 适用 | 说明 |
-|------|------|------|
-| `@机器人 xxx` | 群聊 | 通过 @ 触发 AI |
-| `/ai xxx` | 群聊 | 通过命令触发 AI |
-| `/ai help` | 两者 | 显示帮助 |
-| `/ai clear` | 两者 | 清空当前会话 |
-
----
-
-## 🛠️ 技术栈
-
-```
-┌─────────────────────────────────────────────────────┐
-│                    技术架构                          │
-├─────────────┬─────────────┬───────────────────────┤
-│    Node.js  │  TypeScript │      NapCatQQ         │
-│   18+       │   类型安全   │      QQ 接入          │
-├─────────────┼─────────────┼───────────────────────┤
-│   阿里云 API │   通义模型   │       SQLite         │
-│  ☁️ 云端     │   qwen-plus │      持久化          │
-├─────────────┴─────────────┼───────────────────────┤
-│       Ollama (可选)        │      Docker          │
-│    🔧 本地模型              │    容器化部署         │
-└───────────────────────────┴───────────────────────┘
-```
-
----
-
-## 📁 项目结构
+## 🏗️ 项目结构
 
 ```
 ai-robot/
 ├── apps/
-│   ├── server/              # 🤖 主服务
-│   └── setup-ui/            # 🎯 Setup UI 控制台
+│   ├── server/              # 主服务
+│   └── setup-ui/           # 可视化控制台 (http://localhost:3002)
 ├── packages/
-│   ├── core/               # 📋 核心接口定义
-│   ├── qq-adapter/         # 💬 QQ 适配器 (NapCatQQ)
-│   ├── ollama-adapter/     # 🤖 Ollama 适配器
-│   ├── sqlite-storage/     # 💾 SQLite 持久化
-│   ├── memory-storage/     # 💾 内存存储
-│   ├── doctor/             # 🩺 环境检查工具
-│   └── config/             # ⚙️ 配置管理
-├── prompts/                # 💬 Prompt 预设
-│   ├── default/            # 默认风格
-│   ├── group/              # 群聊专用
-│   └── helper/             # 辅助提示
-├── docs/
-│   ├── quick-start-qq.md   # 🚀 快速开始
-│   ├── deployment.md       # 🐳 部署指南
-│   ├── prompt-guide.md     # 💬 Prompt 调整
-│   └── troubleshooting.md   # ❓ 故障排除
-├── examples/               # 📚 示例配置
-│   └── qq-ollama-minimal/  # 最小配置示例
-├── deployments/
-│   └── docker-compose.yml   # 🐳 Docker 部署
-└── Dockerfile
+│   ├── core/                # 核心逻辑
+│   ├── config/              # 配置管理
+│   ├── doctor/              # 环境检测 (pnpm doctor)
+│   ├── storage/             # 存储抽象层
+│   ├── sqlite-storage/      # SQLite 实现
+│   ├── memory-storage/      # 内存实现 (开发用)
+│   ├── llm-adapters/        # LLM 适配器抽象
+│   ├── im-adapters/         # IM 适配器抽象
+│   ├── alibaba-adapter/     # 阿里云/通义 API Provider
+│   ├── ollama-adapter/      # Ollama 本地模型 Provider
+│   ├── qq-adapter/          # QQ 平台适配器
+│   ├── wechat-adapter/      # 微信平台适配器 (预留)
+│   ├── shared/              # 共享工具
+│   └── logger/              # 日志
+├── docs/                    # 文档
+├── prompts/                 # Prompt 预设
+├── scripts/                 # 脚本 (pnpm setup)
+├── deployments/             # 部署配置
+└── examples/                # 示例配置
 ```
 
 ---
 
-## ⚠️ 已知限制
+## 🎨 v1.20 升级亮点
 
-| 限制 | 说明 | 解决方案 |
-|------|------|----------|
-| 🔒 需要图形界面 | NapCatQQ 需本地运行 | 未来考虑无头方案 |
-| 🐢 CPU 运行较慢 | 无 GPU 时响应慢 | 建议使用 GPU |
-| 📦 单实例 | SQLite 不支持并发 | 未来考虑 PostgreSQL |
-| 💾 模型需手动下载 | qwen2.5:7B 约 4GB | 首次下载后可持续使用 |
-
----
-
-## 📋 常见问题
-
-<details>
-<summary>🤔 机器人没有回复怎么办？</summary>
-
-1. 确认服务已启动：`tasklist | findstr node` (Windows)
-2. 确认 NapCatQQ 运行正常
-3. 确认 `@机器人` 格式正确
-4. 查看服务日志是否有错误
-
-</details>
-
-<details>
-<summary>🔗 Ollama 连不上？</summary>
-
-1. 确认 Ollama 已启动：`ollama serve`
-2. 确认模型已下载：`ollama list`
-3. 确认端口：`OLLAMA_BASE_URL=http://localhost:11434`
-
-</details>
-
-<details>
-<summary>📢 群聊 @没反应？</summary>
-
-1. 确认 `GROUP_AI_TRIGGER=both` 或 `at`
-2. 确认 @ 的是正确的机器人账号
-3. 检查日志中的 `[Trigger]` 信息
-
-</details>
-
-<details>
-<summary>🐢 回复太慢？</summary>
-
-- 用 GPU：NVIDIA 显卡 + CUDA 驱动
-- 用更小的模型：`OLLAMA_MODEL=qwen2.5:3b`
-- 减少上下文：`SESSION_MAX_MESSAGES=20`
-
-</details>
-
----
-
-## 🗺️ 路线图
-
-```
-Phase 1 ✅ 工程骨架与核心接口
-Phase 2 ✅ QQ + Ollama MVP 闭环
-Phase 3 ✅ SQLite 持久化 + 命令 + Docker
-Phase 4 ✅ Setup UI + Doctor 环境检查
-
-未来计划
-├── 🐳 Docker 部署优化
-├── 💬 微信接入
-├── 🔄 多模型支持
-├── 📊 管理员命令
-└── 🎨 Prompt 可视化编辑
-```
-
----
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
+| 能力 | 说明 |
+|------|------|
+| 🔍 **自动环境检测** | `pnpm doctor` 一键检查环境状态 |
+| ⚡ **自动配置** | `pnpm setup` 自动初始化项目 |
+| 🎁 **可视化控制台** | http://localhost:3002 查看状态 |
+| 📊 **状态可视化** | 清晰的成功/警告/失败提示 |
+| 📖 **文档升级** | 更完整的文档体系 |
 
 ---
 
 ## 📄 License
 
-MIT License
+MIT

@@ -2,54 +2,71 @@
 
 ## 环境要求
 
-- Node.js 18+
-- Docker & Docker Compose (用于容器部署)
-- Ollama (本地运行 AI 模型)
-- NapCatQQ (QQ 机器人接入)
+### API 模式（默认推荐）
 
-## 本地开发部署
+| 软件 | 版本 | 说明 |
+|------|------|------|
+| Node.js | 18+ | 运行机器人 |
+| pnpm | 8+ | 包管理器 |
+| NapCatQQ | 最新版 | QQ 机器人框架 |
 
-### 1. 安装依赖
+### 本地模式（可选，需要 GPU）
+
+| 软件 | 版本 | 说明 |
+|------|------|------|
+| NVIDIA 显卡 | 6GB+ 显存 | 运行本地模型 |
+| Ollama | 最新版 | 本地模型运行时 |
+
+---
+
+## 🚀 快速部署（API 模式）
+
+### 第一步：安装依赖
 
 ```bash
+git clone https://github.com/badhope/ai-robot.git
+cd ai-robot
 pnpm install
 ```
 
-### 2. 配置环境变量
+### 第二步：自动配置
 
 ```bash
-cp .env.example .env
-# 编辑 .env 文件配置必要的参数
+pnpm setup
 ```
 
-### 3. 启动 Ollama
+这会自动：
+- 创建 `.env` 文件
+- 创建必要目录
+- 初始化 SQLite 数据库
 
-```bash
-# 安装 Ollama: https://ollama.com
+### 第三步：配置 API Key
 
-# 拉取模型
-ollama pull qwen2.5:7b
+编辑 `.env` 文件，填入你的阿里云 API Key：
 
-# 启动 Ollama 服务
-ollama serve
+```env
+ALIBABA_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### 4. 启动 NapCatQQ
+获取 API Key：https://bailian.console.aliyun.com/
 
-参见 [快速开始指南](./quick-start-qq.md)
+### 第四步：启动 NapCatQQ
 
-### 5. 启动服务
+1. 下载 [NapCatQQ](https://github.com/NapNeko/NapCatQQ/releases)
+2. 运行并扫码登录
+3. 确认 WebSocket 是 `ws://localhost:3001`
+
+### 第五步：启动机器人
 
 ```bash
-# 开发模式
 pnpm dev
-
-# 或构建后运行
-pnpm build
-node apps/server/dist/index.js
 ```
 
-## Docker 部署
+打开 http://localhost:3002 查看控制台状态。
+
+---
+
+## 🐳 Docker 部署
 
 ### 1. 构建镜像
 
@@ -57,25 +74,26 @@ node apps/server/dist/index.js
 docker build -t ai-robot .
 ```
 
-### 2. 配置 docker-compose
+### 2. 配置环境
 
-编辑 `deployments/docker-compose.yml` 或创建 `.env` 文件：
+创建 `.env` 文件：
 
 ```env
+# AI Provider - API 模式（默认）
+LLM_PROVIDER=alibaba
+ALIBABA_API_KEY=sk-xxxxxxxxxxxxxxxx
+
+# 或本地模式（需要 Ollama）
+# LLM_PROVIDER=ollama
+# OLLAMA_BASE_URL=http://host.docker.internal:11434
+# OLLAMA_MODEL=qwen2.5:7b
+
 # QQ 配置
 QQ_ENABLED=true
 QQ_WS_URL=ws://host.docker.internal:3001
 
-# Ollama 配置 (需要宿主机运行)
-OLLAMA_BASE_URL=http://host.docker.internal:11434
-OLLAMA_MODEL=qwen2.5:7b
-
-# 会话存储
+# 存储
 SESSION_STORAGE=sqlite
-SESSION_MAX_MESSAGES=100
-
-# 日志
-LOG_LEVEL=info
 ```
 
 ### 3. 启动服务
@@ -88,111 +106,125 @@ docker-compose up -d
 ### 4. 查看日志
 
 ```bash
-docker-compose logs -f app
+docker-compose logs -f
 ```
 
-## 数据存储
+---
 
-- **SQLite 数据库**: `./data/sessions.db`
-- Docker 部署时映射到宿主机 `./data` 目录
-- 服务重启后会话历史保留
+## 💻 本地开发
 
-## 网络说明
-
-### Docker 网络模式
-
-本项目使用 `network_mode: host`，容器直接使用宿主机网络。
-
-- Ollama 需要在宿主机运行，容器通过 `host.docker.internal` 访问
-- NapCatQQ 的 WebSocket 服务也需要在宿主机运行
-
-### 独立部署 Ollama
-
-Ollama 不适合放入 docker-compose，因为：
-
-1. Ollama 需要 GPU 支持
-2. 模型文件较大，重复下载浪费空间
-3. 建议独立部署，与 AI Robot 通过 HTTP 通信
-
-推荐部署架构：
-
-```
-┌─────────────────┐
-│   NapCatQQ      │
-│   (Windows/Mac) │
-└────────┬────────┘
-         │ WebSocket
-         ▼
-┌─────────────────┐     ┌─────────────────┐
-│   AI Robot      │────▶│   Ollama        │
-│   (Docker/App)  │     │   (独立部署)    │
-└─────────────────┘     └─────────────────┘
-```
-
-## 验证部署
-
-1. 检查服务是否运行：
+### 启动开发模式
 
 ```bash
-# 查看进程
-ps aux | grep node
-
-# 或 Docker
-docker ps | grep ai-robot
+pnpm dev
 ```
 
-2. 查看日志确认启动成功：
-
-```
-AI Robot Server v0.1.0
-QQ adapter: enabled
-LLM provider: ollama
-Session storage: sqlite
-Adapter started successfully
-LLM provider health check passed
-Chat Server started successfully
-```
-
-3. 在 QQ 群中测试：
-
-- `@机器人 你好`
-- `/ai 你好`
-- `/ai help`
-- `/ai clear`
-
-## 故障排查
-
-### 服务启动失败
-
-1. 检查端口占用：
-```bash
-lsof -i :3000
-```
-
-2. 检查配置文件权限
-
-### Ollama 连接失败
-
-1. 确认 Ollama 服务运行中
-2. 确认 `OLLAMA_BASE_URL` 配置正确
-3. 尝试手动调用：`curl http://localhost:11434/api/generate -d '{"model":"qwen2.5:7b","prompt":"hi"}'`
-
-### QQ 消息无响应
-
-1. 确认 NapCatQQ 运行正常
-2. 检查 WebSocket 连接状态
-3. 确认 `QQ_ENABLED=true`
-
-## 更新升级
+### 启动控制台
 
 ```bash
-# 拉取最新代码
-git pull
-
-# 重新构建
-pnpm build
-
-# 重启服务
-# 开发模式: pnpm dev
-# Docker: docker-compose down && docker-compose up -d
+pnpm dev:ui
+# 访问 http://localhost:3002
 ```
+
+### 环境检测
+
+```bash
+pnpm doctor
+```
+
+---
+
+## 🔧 高级配置
+
+### 切换到本地模式
+
+编辑 `.env`：
+
+```env
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen2.5:7b
+```
+
+安装 Ollama：
+
+```bash
+# 安装 Ollama: https://ollama.com
+ollama pull qwen2.5:7b
+ollama serve
+```
+
+### 配置代理
+
+如果网络受限，可以配置代理：
+
+```env
+HTTP_PROXY=http://localhost:7890
+HTTPS_PROXY=http://localhost:7890
+```
+
+### 日志级别
+
+```env
+LOG_LEVEL=debug  # debug | info | warn | error
+```
+
+---
+
+## 📁 目录结构
+
+部署后会产生以下目录：
+
+| 目录 | 说明 |
+|------|------|
+| `./data/` | SQLite 数据库、会话存储 |
+| `./logs/` | 日志文件 |
+| `./cache/` | 临时缓存 |
+
+---
+
+## 🔒 安全建议
+
+1. **API Key 安全**
+   - 不要提交 `.env` 到 Git
+   - 生产环境使用环境变量
+
+2. **网络隔离**
+   - 生产环境建议在内网运行
+   - 配置防火墙规则
+
+3. **定期备份**
+   - 备份 `data/sessions.db`
+   - 备份 `.env` 配置文件
+
+---
+
+## 🆘 常见问题
+
+### Q: 启动后显示 "NapCatQQ 未连接"？
+
+1. 确认 NapCatQQ 已启动
+2. 确认 WebSocket 地址是 `ws://localhost:3001`
+3. 确认 QQ 已扫码登录
+
+### Q: API 调用失败？
+
+1. 检查 `ALIBABA_API_KEY` 是否正确
+2. 检查阿里云账户余额
+3. 运行 `pnpm doctor` 检查
+
+### Q: Docker 部署无法连接 NapCatQQ？
+
+使用 `host.docker.internal` 代替 `localhost`：
+
+```env
+QQ_WS_URL=ws://host.docker.internal:3001
+```
+
+---
+
+## 📚 相关文档
+
+- [快速开始](quick-start-qq.md)
+- [故障排查](troubleshooting.md)
+- [FAQ](faq.md)
