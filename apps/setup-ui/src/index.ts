@@ -2,8 +2,32 @@ import express, { Request, Response } from 'express';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import { spawn } from 'child_process';
 const app = express();
 const PORT = 3002;
+
+function openBrowser(url: string): void {
+  const platform = process.platform;
+  let cmd: string;
+  let args: string[];
+
+  if (platform === 'win32') {
+    cmd = 'cmd';
+    args = ['/c', 'start', url];
+  } else if (platform === 'darwin') {
+    cmd = 'open';
+    args = [url];
+  } else {
+    cmd = 'xdg-open';
+    args = [url];
+  }
+
+  try {
+    spawn(cmd, args, { detached: true, stdio: 'ignore' }).unref();
+  } catch (e) {
+    // 忽略错误，不影响主流程
+  }
+}
 
 app.use(express.json());
 
@@ -576,4 +600,5 @@ runDoctor();
 app.listen(PORT, () => {
   console.log(`\n🤖 AI Robot v1.20 控制台已启动`);
   console.log(`📍 http://localhost:${PORT}\n`);
+  openBrowser(`http://localhost:${PORT}`);
 });
