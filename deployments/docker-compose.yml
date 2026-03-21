@@ -12,19 +12,53 @@ services:
       - QQ_WS_URL=${QQ_WS_URL:-ws://host.docker.internal:3001}
       - QQ_NUMBER=${QQ_NUMBER:-}
       - QQ_TOKEN=${QQ_TOKEN:-}
-      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+
+      # LLM Provider 选择
+      # alibaba (默认) | ollama | mock
+      - LLM_PROVIDER=${LLM_PROVIDER:-alibaba}
+
+      # 阿里云/通义 API 配置 (API 模式)
+      - ALIBABA_API_KEY=${ALIBABA_API_KEY:-}
+      - ALIBABA_BASE_URL=${ALIBABA_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1}
+      - ALIBABA_MODEL=${ALIBABA_MODEL:-qwen-plus}
+      - ALIBABA_TIMEOUT=${ALIBABA_TIMEOUT:-120000}
+
+      # Ollama 配置 (本地模式，可选)
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:7b}
       - OLLAMA_TIMEOUT=${OLLAMA_TIMEOUT:-120000}
+
+      # Session 存储
       - SESSION_STORAGE=${SESSION_STORAGE:-sqlite}
       - SQLITE_DB_PATH=/app/data/sessions.db
       - SESSION_MAX_MESSAGES=${SESSION_MAX_MESSAGES:-100}
+
+      # 触发规则
       - CHAT_PREFIX=${CHAT_PREFIX:-/ai}
       - PRIVATE_AUTO_REPLY=${PRIVATE_AUTO_REPLY:-true}
       - GROUP_AI_TRIGGER=${GROUP_AI_TRIGGER:-both}
+
+      # 日志
       - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:
       - ./data:/app/data
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     network_mode: host
+
+# 使用说明：
+#
+# API 模式 (默认推荐):
+#   LLM_PROVIDER=alibaba
+#   ALIBABA_API_KEY=sk-xxxxxxxxxx
+#
+# 本地模式 (需要 Ollama):
+#   LLM_PROVIDER=ollama
+#   OLLAMA_BASE_URL=http://host.docker.internal:11434
+#   OLLAMA_MODEL=qwen2.5:7b
+#
+# 启动:
+#   docker-compose up -d
+#
+# 查看日志:
+#   docker logs -f ai-robot-app
