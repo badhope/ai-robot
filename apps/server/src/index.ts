@@ -4,7 +4,6 @@ import { AlibabaProvider } from '@ai-robot/alibaba-adapter';
 import { MockIMAdapter } from '@ai-robot/im-adapters';
 import { MockLLMProvider } from '@ai-robot/llm-adapters';
 import { MemorySessionStore } from '@ai-robot/storage';
-import { SQLiteSessionStore } from '@ai-robot/sqlite-storage';
 import { logger } from '@ai-robot/logger';
 import { buildSessionId } from '@ai-robot/shared';
 import type { ChatMessageEvent, IMAdapter, LLMProvider, SessionStore } from '@ai-robot/core';
@@ -19,6 +18,29 @@ interface ServerOptions {
   sessionStore?: SessionStore;
 }
 
+async function createSessionStore(config: AppConfig, options?: { sessionStore?: SessionStore }): Promise<SessionStore> {
+  if (options?.sessionStore) {
+    return options.sessionStore;
+  }
+
+  if (config.session.storage === 'sqlite') {
+    try {
+      const { SQLiteSessionStore } = await import('@ai-robot/sqlite-storage');
+      return new SQLiteSessionStore({
+        dbPath: config.session.sqlite.dbPath,
+        maxMessages: config.session.maxMessages,
+      });
+    } catch (error) {
+      logger.warn('SQLite storage unavailable, falling back to memory storage');
+      return new MemorySessionStore({ maxMessages: config.session.maxMessages });
+    }
+  }
+
+  return new MemorySessionStore({
+    maxMessages: config.session.memory.maxMessages,
+  });
+}
+
 class ChatServer {
   private adapter: IMAdapter;
   private llmProvider: LLMProvider;
@@ -28,18 +50,9 @@ class ChatServer {
   constructor(options: ServerOptions = {}) {
     this.config = options.config || loadConfig();
 
-    if (options.sessionStore) {
-      this.sessionStore = options.sessionStore;
-    } else if (this.config.session.storage === 'sqlite') {
-      this.sessionStore = new SQLiteSessionStore({
-        dbPath: this.config.session.sqlite.dbPath,
-        maxMessages: this.config.session.maxMessages,
-      });
-    } else {
-      this.sessionStore = new MemorySessionStore({
-        maxMessages: this.config.session.memory.maxMessages,
-      });
-    }
+    this.sessionStore = new MemorySessionStore({
+      maxMessages: this.config.session.memory.maxMessages,
+    });
 
     if (options.provider) {
       this.llmProvider = options.provider;
@@ -71,6 +84,16 @@ class ChatServer {
       });
     } else {
       this.adapter = new MockIMAdapter();
+    }
+
+    if (options.sessionStore) {
+      this.sessionStore = options.sessionStore;
+    }
+  }
+
+  async init(): Promise<void> {
+    if (!this.sessionStore || this.sessionStore instanceof MemorySessionStore) {
+      this.sessionStore = await createSessionStore(this.config, { sessionStore: this.sessionStore });
     }
   }
 
@@ -107,7 +130,7 @@ class ChatServer {
   async stop(): Promise<void> {
     await this.adapter.stop();
     if (this.sessionStore && 'close' in this.sessionStore) {
-      (this.sessionStore as SQLiteSessionStore).close();
+      (this.sessionStore as { close: () => void }).close();
     }
     logger.info('Chat Server stopped');
   }
@@ -214,6 +237,7 @@ async function main() {
   });
 
   try {
+    await server.init();
     await server.start();
   } catch (error) {
     logger.error(`Failed to start server: ${error}`);
@@ -223,7 +247,8 @@ async function main() {
 
 export { ChatServer, main, type ServerOptions };
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isMain = process.argv[1]?.endsWith('index.js') || process.argv[1]?.includes('server');
+if (isMain) {
   main().catch((error) => {
     logger.error(`Fatal error: ${error}`);
     process.exit(1);

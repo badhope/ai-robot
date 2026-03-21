@@ -399,3 +399,8 @@ export async function runDoctorCheck(config?: {
   doctor.printReport(report);
   return report;
 }
+
+const isMain = import.meta.url.endsWith(process.argv[1]?.replace(/^.*[\\/]/, '') || '');
+if (isMain || process.argv[1]?.endsWith('index.js')) {
+  runDoctorCheck().catch(console.error);
+}
