@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { NapCatQQAdapter } from '@ai-robot/qq-adapter';
 import { OllamaProvider } from '@ai-robot/ollama-adapter';
 import { AlibabaProvider } from '@ai-robot/alibaba-adapter';
