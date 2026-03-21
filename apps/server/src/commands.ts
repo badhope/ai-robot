@@ -48,5 +48,6 @@ export async function handleCommand(
 }
 
 export function isCommand(text: string): boolean {
+  if (!text || typeof text !== 'string') return false;
   return text.startsWith('/ai ');
 }

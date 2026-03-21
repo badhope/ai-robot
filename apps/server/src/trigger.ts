@@ -35,8 +35,10 @@ export function shouldTriggerAI(event: ChatMessageEvent, config: TriggerConfig):
 }
 
 export function cleanGroupMessage(text: string, config: TriggerConfig): string {
+  if (!text || typeof text !== 'string') return '';
+
   let cleaned = text;
-  
+
   if (cleaned.startsWith(config.groupPrefix)) {
     cleaned = cleaned.slice(config.groupPrefix.length).trim();
   }

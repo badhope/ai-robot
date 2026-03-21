@@ -37,6 +37,10 @@ export class NapCatQQAdapter implements IMAdapter {
   private ws: WebSocket | null = null;
   private running = false;
   private selfId: number | null = null;
+  private reconnectAttempts = 0;
+  private readonly maxReconnectAttempts = 10;
+  private readonly baseReconnectDelay = 1000;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(config: NapCatQQConfig) {
     this.config = {
@@ -61,11 +65,17 @@ export class NapCatQQAdapter implements IMAdapter {
   async stop(): Promise<void> {
     if (!this.running) return;
 
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
     if (this.ws) {
       this.ws.close();
       this.ws = null;
     }
     this.running = false;
+    this.reconnectAttempts = 0;
     logger.info('NapCatQQAdapter stopped');
   }
 
@@ -110,11 +120,19 @@ export class NapCatQQAdapter implements IMAdapter {
   }
 
   private connectWebSocket(): void {
+    if (!this.running) return;
+
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      logger.error(`Max reconnection attempts (${this.maxReconnectAttempts}) reached. Please check NapCatQQ status or restart the server manually.`);
+      return;
+    }
+
     try {
       this.ws = new WebSocket(this.config.wsUrl!);
 
       this.ws.onopen = () => {
         logger.info('WebSocket connected to NapCatQQ');
+        this.reconnectAttempts = 0;
       };
 
       this.ws.onmessage = async (event) => {
@@ -131,14 +149,20 @@ export class NapCatQQAdapter implements IMAdapter {
       };
 
       this.ws.onclose = () => {
-        if (this.running) {
-          logger.warn('WebSocket disconnected, reconnecting in 5s...');
-          setTimeout(() => this.connectWebSocket(), 5000);
+        if (this.running && this.reconnectAttempts < this.maxReconnectAttempts) {
+          this.reconnectAttempts++;
+          const delay = Math.min(this.baseReconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
+          logger.warn(`WebSocket disconnected, reconnecting in ${delay/1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+          this.reconnectTimer = setTimeout(() => this.connectWebSocket(), delay);
         }
       };
     } catch (error) {
-      logger.error(`Failed to connect WebSocket: ${error}`);
-      setTimeout(() => this.connectWebSocket(), 5000);
+      if (this.running && this.reconnectAttempts < this.maxReconnectAttempts) {
+        this.reconnectAttempts++;
+        const delay = Math.min(this.baseReconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
+        logger.error(`Failed to connect WebSocket, retrying in ${delay/1000}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}): ${error}`);
+        this.reconnectTimer = setTimeout(() => this.connectWebSocket(), delay);
+      }
     }
   }
 

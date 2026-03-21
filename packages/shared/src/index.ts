@@ -3,6 +3,10 @@ export function generateId(): string {
 }
 
 export function buildSessionId(platform: string, roomId: string | undefined, senderId: string): string {
+  if (!platform || !senderId) {
+    throw new Error('buildSessionId requires platform and senderId');
+  }
+
   if (roomId) {
     return `room:${platform}:${roomId}`;
   }

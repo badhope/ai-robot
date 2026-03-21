@@ -185,6 +185,51 @@ pnpm doctor
 
 ---
 
+## ⚠️ 系统限制与兼容性
+
+### Node.js 版本要求
+
+| 版本 | 支持状态 | 备注 |
+|------|---------|------|
+| Node.js 18.x | ✅ 支持 | 推荐 LTS 版本 |
+| Node.js 20.x | ✅ 支持 | 推荐 |
+| Node.js 22.x | ⚠️ 可能有问题 | better-sqlite3 可能需要编译 |
+| Node.js 24.x | ⚠️ 实验性 | 不推荐生产环境 |
+
+### SQLite 原生模块
+
+`better-sqlite3` 是原生模块，需要 C++ 编译环境：
+
+- **Windows**: 需要 Visual Studio Build Tools
+- **macOS**: 需要 Xcode Command Line Tools
+- **Linux**: 需要 gcc 和 make
+
+如遇 SQLite 错误，可临时使用内存模式：
+```env
+SESSION_STORAGE=memory
+```
+
+### 平台兼容性
+
+| 平台 | 支持状态 |
+|------|---------|
+| Windows | ✅ 完全支持 |
+| macOS | ✅ 支持 |
+| Linux | ✅ 支持 |
+| Docker | ✅ 支持（推荐） |
+
+### NapCatQQ 版本
+
+推荐使用最新版本的 NapCatQQ，旧版本可能存在兼容性问题。
+
+### API Key 安全
+
+- 阿里云 API Key 仅在调用时传递给第三方 API
+- Key 存储在本地 .env 文件中，不会提交到代码仓库
+- 生产环境建议使用环境变量而非 .env 文件
+
+---
+
 ## 🆘 获取帮助
 
 如果以上都不能解决你的问题：

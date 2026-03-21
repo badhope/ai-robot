@@ -139,7 +139,12 @@ class ChatServer {
     const sessionId = buildSessionId(event.platform, event.roomId, event.senderId);
     logger.debug(`[Message] ${event.messageId} from ${event.senderName}`);
 
-    const text = event.text.trim();
+    const text = event.text?.trim() || '';
+    if (!text) {
+      logger.debug('[Message] Empty message ignored');
+      return;
+    }
+
     const isGroup = event.chatType === 'group';
 
     if (isCommand(text)) {
