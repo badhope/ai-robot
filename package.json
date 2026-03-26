@@ -1,33 +1,157 @@
 {
   "name": "ai-robot",
-  "version": "1.20.0",
+  "version": "2.0.0",
+  "description": "AI Robot - 智能群聊助手 | 傻瓜式 QQ 群聊 AI 机器人，支持多平台 API，一键启动",
+  "author": {
+    "name": "AI Robot Team",
+    "email": "contact@ai-robot.dev",
+    "url": "https://github.com/badhope/ai-robot"
+  },
+  "license": "SEE LICENSE FILE",
   "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "pnpm --filter @ai-robot/server dev",
-    "dev:ui": "pnpm --filter @ai-robot/setup-ui dev",
-    "build": "pnpm -r build",
-    "clean": "pnpm -r clean",
-    "doctor": "pnpm --filter @ai-robot/doctor run start",
-    "setup": "node scripts/setup.js"
+  "homepage": "https://github.com/badhope/ai-robot#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badhope/ai-robot.git"
   },
+  "bugs": {
+    "url": "https://github.com/badhope/ai-robot/issues"
+  },
+  "keywords": [
+    "ai-robot",
+    "qq-bot",
+    "chatbot",
+    "ai-assistant",
+    "qq-group",
+    "artificial-intelligence",
+    "llm",
+    "alibaba-tongyi",
+    "deepseek",
+    "openai",
+    "ollama",
+    "electron",
+    "desktop-app",
+    "chinese",
+    "机器人",
+    "群聊助手",
+    "智能客服"
+  ],
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
   },
-  "build": {
-    "allowedDeprecatedVersions": {},
-    "ignoredBuiltDependencies": []
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.25",
-    "@types/node": "^20.0.0",
-    "@types/ws": "^8.18.1",
-    "typescript": "^5.3.0"
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "dev:electron": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "build": "vue-tsc && vite build",
+    "build:electron": "npm run build && electron-builder",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "typecheck": "vue-tsc --noEmit",
+    "clean": "rimraf dist dist-electron node_modules/.vite",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "axios": "^1.13.6",
+    "better-sqlite3": "^11.0.0",
+    "electron-store": "^10.0.0",
     "express": "^4.22.1",
+    "pinia": "^3.0.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0",
     "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/express": "^4.17.25",
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "@vue/tsconfig": "^0.7.0",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "postcss": "^8.5.0",
+    "rimraf": "^6.0.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vue-tsc": "^2.2.0",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "dev.ai-robot.desktop",
+    "productName": "AI Robot",
+    "copyright": "Copyright © 2024 AI Robot Team. All rights reserved.",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "resources",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "build/icons",
+      "category": "Network;Chat;InstantMessaging"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AI Robot",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
+    }
   }
 }

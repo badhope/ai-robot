@@ -1,16 +1,58 @@
+# Dependencies
 node_modules/
-dist/
-.DS_Store
-*.log
+.pnpm-store/
 
-# SQLite database
-data/
-*.db
+# Build output
+dist/
+dist-electron/
+release/
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Environment files
 .env
 .env.local
+.env.*.local
 
-# IDE
-.idea/
-.vscode/
+# Database
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# Cache
+.cache/
+.parcel-cache/
+*.tsbuildinfo
+
+# Electron
+*.asar
+
+# Test
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/

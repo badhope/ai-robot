@@ -1,184 +1,177 @@
-# 🤖 AI Robot
+# 🌟 AI Robot
 
 <div align="center">
 
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
-║   █████╗ ██╗███████╗██╗  ██╗██╗  ██╗   ██╗                   ║
-║  ██╔══██╗██║██╔════╝╚██╗██╔╝╚██╗██╔╝   ██║                   ║
-║  ███████║██║███████╗ ╚███╔╝  ╚███╔╝    ██║                   ║
-║  ██╔══██║██║╚════██║ ██╔██╗  ██╔██╗    ╚═╝                   ║
-║  ██║  ██║██║███████║██╔╝ ██╗██╔╝ ██╗   ██║                   ║
-║  ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝                   ║
+║        🌟 AI Robot - 智能群聊助手 🤖                              ║
 ║                                                                  ║
-║        🤖 QQ 群聊 AI 机器人 · 阿里云/通义 API 主线 🤖              ║
+║        Intelligent QQ Group Chat Assistant                       ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-**🚀 v1.20 正式版 · 默认阿里云/通义 API · 无需 GPU · 开箱即用**
+**🚀 傻瓜式 QQ 群聊 AI 机器人 | 支持多平台 API | 一键启动 | 开箱即用**
 
-[![Node.js Version](https://img.shields.io/badge/node-18%2B-green?style=flat-square&logo=node.js)](https://nodejs.org)
-[![TypeScript](https://img.shields.io/badge/typescript-5.3-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
-[![License](https://img.shields.io/badge/license-MIT-yellow?style=flat-square&logo=git)](LICENSE)
-[![Alibaba](https://img.shields.io/badge/DashScope-API%20First-ff6b6b?style=flat-square&logo=alibaba)](https://help.aliyun.com/zh/dashscope)
-[![NapCatQQ](https://img.shields.io/badge/NapCatQQ-QQ%20Adapter-12defa?style=flat-square&logo=TencentQQ)](https://github.com/NapNeko/NapCatQQ)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue?style=flat-square)](https://github.com/badhope/ai-robot)
+[![License](https://img.shields.io/badge/license-Proprietary-green?style=flat-square)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square)](https://github.com/badhope/ai-robot/releases)
+[![Stars](https://img.shields.io/github/stars/badhope/ai-robot?style=flat-square)](https://github.com/badhope/ai-robot/stargazers)
 
 </div>
 
 ---
 
-## ✨ 你能做什么
+## ✨ 特性
 
-| 功能 | 说明 |
+| 功能 | 描述 |
 |------|------|
-| 🎯 **@机器人提问** | 在 QQ 群 @机器人 发消息，AI 立即回答 |
-| 🔥 **/ai 命令触发** | 发送 `/ai 你好` 同样触发 AI 对话 |
-| 💬 **私聊自动回复** | 给机器人发私信，自动回复 |
-| 💾 **会话持久化** | 服务重启后会话不丢失（SQLite） |
-| 🧹 **/ai clear** | 清空当前会话，重新开始 |
-| 📖 **/ai help** | 查看帮助信息 |
+| 🎯 **傻瓜式操作** | 下载 → 安装 → 填写 API Key → 一键启动 |
+| 🌐 **多平台支持** | 阿里云、DeepSeek、智谱、月之暗面、OpenAI、Google、本地 Ollama |
+| 💬 **智能对话** | 支持 @ 触发、命令触发、私聊自动回复 |
+| 🖼️ **图片识别** | 识别图片内容，多模态 AI 支持（专业版） |
+| 🎤 **语音回复** | 文字转语音回复（专业版） |
+| 🔌 **插件系统** | 丰富的插件生态，可扩展功能 |
+| 💾 **会话持久化** | SQLite 存储，重启不丢失 |
+| 🎨 **现代界面** | Electron + Vue 3，流畅美观 |
+| 🌙 **暗色主题** | 护眼的深色界面 |
 
 ---
 
-## 🎯 效果演示
+## 📸 截图
 
 <details>
-<summary>👆 点击查看对话示例</summary>
+<summary>👆 点击查看截图</summary>
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│ 群聊 @机器人                                                │
-├─────────────────────────────────────────────────────────────┤
-│ [小明] @AIRobot 你好，请介绍一下自己                         │
-│                                                             │
-│ [AIRobot] 你好！👋 我是基于 Qwen2.5 模型运行的 AI 助手      │
-│                                                             │
-│ 我的特点是：                                                 │
-│ • 默认使用阿里云/通义 API，响应快速                          │
-│ • 支持上下文记忆，会话连贯                                   │
-│ • 完全开源，你可以随意修改和部署                             │
-└─────────────────────────────────────────────────────────────┘
-```
+### 主界面
+![主界面](docs/images/screenshot-main.png)
+
+### 设置界面
+![设置界面](docs/images/screenshot-settings.png)
+
+### 插件中心
+![插件中心](docs/images/screenshot-plugins.png)
 
 </details>
 
 ---
 
-## 🚀 快速开始（API 模式 - 默认推荐）
+## 🚀 快速开始
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                     🚀 3 步快速启动                             │
-├────────────────────────────────────────────────────────────────┤
-│                                                                │
-│  ① 获取 API Key      ② 启动 NapCatQQ       ③ 启动机器人       │
-│  ─────────────        ─────────────          ─────────────      │
-│  阿里云百炼           NapCatQQ 运行          pnpm dev           │
-│  ~2 分钟              ~3 分钟                ~1 分钟           │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘
-```
+### 方式一：直接下载（推荐）
 
-### 第一步：获取阿里云 API Key
+1. 前往 [Releases](https://github.com/badhope/ai-robot/releases) 页面
+2. 下载对应平台的安装包
+3. 安装并启动应用
+4. 选择 AI 平台，填写 API Key
+5. 启动 NapCatQQ 并扫码登录
+6. 点击「启动机器人」开始使用
 
-1. 打开 [阿里云百炼](https://bailian.console.aliyun.com/)
-2. 注册并登录
-3. 开通 DashScope 服务
-4. 创建 API Key
+### 方式二：从源码构建
 
 ```bash
-# 配置到 .env 文件
-ALIBABA_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-### 第二步：启动 NapCatQQ
-
-> NapCatQQ 让你的 QQ 号变成可被程序控制的机器人
-
-1. 下载 [NapCatQQ](https://github.com/NapNeko/NapCatQQ/releases)
-2. 运行并扫码登录你的 QQ
-3. 确认 WebSocket 是 `ws://localhost:3001`
-
-### 第三步：启动 AI Robot
-
-```bash
-# 克隆并安装
+# 克隆仓库
 git clone https://github.com/badhope/ai-robot.git
 cd ai-robot
+
+# 安装依赖
 pnpm install
 
-# 自动配置（推荐）
-pnpm setup
-
-# 或手动配置
-cp .env.example .env
-# 修改 .env 中的 ALIBABA_API_KEY
-
-# 启动
+# 开发模式
 pnpm dev
 
-# 打开控制台查看状态
-# http://localhost:3002
+# 构建
+pnpm build:win   # Windows
+pnpm build:mac   # macOS
+pnpm build:linux # Linux
 ```
-
-🎉 **验证**：在群里发送 `@你的机器人 你好`
 
 ---
 
-## 🔍 环境检测
+## 📋 系统要求
 
-项目提供了自动环境检测功能：
+| 平台 | 最低要求 | 推荐配置 |
+|------|----------|----------|
+| **Windows** | Windows 10 64位 | Windows 11 64位 |
+| **macOS** | macOS 10.15+ | macOS 12+ |
+| **Linux** | Ubuntu 20.04+ | Ubuntu 22.04+ |
 
-```bash
-# 检查环境状态
-pnpm doctor
-```
-
-检测内容包括：
-- Node.js 版本
-- 配置文件状态
-- 阿里云 API 连接
-- NapCatQQ 连接
-- SQLite 数据库
+**其他要求：**
+- Node.js 18+ （仅源码构建需要）
+- pnpm 8+ （仅源码构建需要）
+- NapCatQQ （QQ 机器人框架）
 
 ---
 
-## 💡 可选：使用本地模型（需要 GPU）
+## 🎯 支持的 AI 平台
 
-如果你有 NVIDIA 显卡，可以切换到本地 Ollama 模型：
-
-```env
-LLM_PROVIDER=ollama
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen2.5:7b
-```
-
-```bash
-# 安装 Ollama: https://ollama.com
-ollama pull qwen2.5:7b
-ollama serve
-```
-
-> ⚠️ 本地模式需要：
-> - NVIDIA 显卡（建议 6GB+ 显存）
-> - 安装并运行 Ollama
-> - 下载模型文件
+| 平台 | 特点 | 免费额度 | 推荐指数 |
+|------|------|----------|----------|
+| 🇨🇳 **阿里云通义** | 响应快，稳定 | 有 | ⭐⭐⭐⭐⭐ |
+| 🇨🇳 **DeepSeek** | 性价比高 | 有 | ⭐⭐⭐⭐⭐ |
+| 🇨🇳 **智谱 AI** | 国产大模型 | 有 | ⭐⭐⭐⭐ |
+| 🇨🇳 **月之暗面** | 长文本强 | 有 | ⭐⭐⭐⭐ |
+| 🌍 **OpenAI** | GPT-4 | 有限 | ⭐⭐⭐⭐ |
+| 🌍 **Google Gemini** | 免费额度大 | 有 | ⭐⭐⭐⭐ |
+| 💻 **本地 Ollama** | 完全免费 | 无限 | ⭐⭐⭐（需显卡）|
 
 ---
 
-## 📚 文档
+## 📖 使用教程
 
-| 文档 | 说明 |
-|------|------|
-| [快速开始](docs/quick-start-qq.md) | 5 分钟快速上手 |
-| [部署指南](docs/deployment.md) | 详细部署说明 |
-| [Prompt 指南](docs/prompt-guide.md) | 机器人风格配置 |
-| [常见问题](docs/faq.md) | FAQ |
-| [故障排查](docs/troubleshooting.md) | 问题排查 |
-| [架构文档](docs/architecture.md) | 开发者架构说明 |
-| [AI 扩展指南](docs/ai-extension-guide.md) | AI 扩展者指南 |
+<details>
+<summary>🔧 如何获取 API Key？</summary>
+
+### 阿里云通义
+1. 打开 [阿里云百炼](https://bailian.console.aliyun.com/)
+2. 登录/注册阿里云账号
+3. 开通 DashScope 服务
+4. 点击左侧「API-KEY 管理」→「创建 API Key」
+
+### DeepSeek
+1. 打开 [DeepSeek 官网](https://platform.deepseek.com/)
+2. 注册账号
+3. 进入「API Keys」→「创建 API Key」
+
+### 智谱 AI
+1. 打开 [智谱开放平台](https://open.bigmodel.cn/)
+2. 注册账号
+3. 进入「API 密钥」→「添加 API 密钥」
+
+</details>
+
+<details>
+<summary>📱 如何使用 NapCatQQ？</summary>
+
+1. 下载 [NapCatQQ](https://github.com/NapNeko/NapCatQQ/releases)
+2. 解压并运行
+3. 扫码登录你的 QQ 机器人账号
+4. 确保 WebSocket 端口为 3001
+
+详细教程请查看 [NapCatQQ 使用指南](docs/napcat-guide.md)
+
+</details>
+
+---
+
+## 💰 专业版功能
+
+| 功能 | 免费版 | 专业版 |
+|------|--------|--------|
+| 每日对话次数 | 1000 次 | ∞ 无限 |
+| AI 模型 | 基础模型 | 全部模型 |
+| 图片识别 | ❌ | ✅ |
+| 语音回复 | ❌ | ✅ |
+| 高级插件 | ❌ | ✅ |
+| 技术支持 | 社区 | 优先 |
+| 多账号管理 | ❌ | ✅ |
+
+**专业版价格：**
+- 年付：¥99/年
+- 月付：¥19.9/月
+
+[立即升级](https://ai-robot.dev/pricing)
 
 ---
 
@@ -186,45 +179,69 @@ ollama serve
 
 ```
 ai-robot/
-├── apps/
-│   ├── server/              # 主服务
-│   └── setup-ui/           # 可视化控制台 (http://localhost:3002)
-├── packages/
-│   ├── core/                # 核心逻辑
-│   ├── config/              # 配置管理
-│   ├── doctor/              # 环境检测 (pnpm doctor)
-│   ├── storage/             # 存储抽象层
-│   ├── sqlite-storage/      # SQLite 实现
-│   ├── memory-storage/      # 内存实现 (开发用)
-│   ├── llm-adapters/        # LLM 适配器抽象
-│   ├── im-adapters/         # IM 适配器抽象
-│   ├── alibaba-adapter/     # 阿里云/通义 API Provider
-│   ├── ollama-adapter/      # Ollama 本地模型 Provider
-│   ├── qq-adapter/          # QQ 平台适配器
-│   ├── wechat-adapter/      # 微信平台适配器 (预留)
-│   ├── shared/              # 共享工具
-│   └── logger/              # 日志
-├── docs/                    # 文档
-├── prompts/                 # Prompt 预设
-├── scripts/                 # 脚本 (pnpm setup)
-├── deployments/             # 部署配置
-└── examples/                # 示例配置
+├── electron/              # Electron 主进程
+│   ├── main.ts           # 主进程入口
+│   └── preload.ts        # 预加载脚本
+├── src/                   # 渲染进程（Vue 3）
+│   ├── components/       # 组件
+│   ├── views/            # 页面
+│   ├── stores/           # Pinia 状态管理
+│   ├── router/           # 路由
+│   └── styles/           # 样式
+├── build/                 # 构建资源
+│   └── icon.icns         # 应用图标
+├── docs/                  # 文档
+├── resources/             # 额外资源
+└── package.json
 ```
 
 ---
 
-## 🎨 v1.20 升级亮点
+## 🤝 贡献指南
 
-| 能力 | 说明 |
-|------|------|
-| 🔍 **自动环境检测** | `pnpm doctor` 一键检查环境状态 |
-| ⚡ **自动配置** | `pnpm setup` 自动初始化项目 |
-| 🎁 **可视化控制台** | http://localhost:3002 查看状态 |
-| 📊 **状态可视化** | 清晰的成功/警告/失败提示 |
-| 📖 **文档升级** | 更完整的文档体系 |
+我们欢迎所有形式的贡献！
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
+
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
-## 📄 License
+## 📄 开源协议
 
-MIT
+本项目采用双协议模式：
+
+- **开源部分**：采用 [MIT License](LICENSE-MIT) 协议
+- **商业部分**：采用 [商业许可协议](LICENSE-COMMERCIAL)
+
+具体请查看 [LICENSE](LICENSE) 文件。
+
+---
+
+## 📞 联系我们
+
+- 📧 Email: contact@ai-robot.dev
+- 💬 QQ群: 123456789
+- 🌐 官网: https://ai-robot.dev
+- 📖 文档: https://docs.ai-robot.dev
+- 🐛 问题反馈: [GitHub Issues](https://github.com/badhope/ai-robot/issues)
+
+---
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=badhope/ai-robot&type=Date)](https://star-history.com/#badhope/ai-robot&Date)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by AI Robot Team**
+
+**⭐ 如果这个项目对你有帮助，请给一个 Star ⭐**
+
+</div>

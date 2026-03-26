@@ -1,0 +1,12 @@
+// 简单图标组件
+export { default as HomeIcon } from './HomeIcon.vue'
+export { default as ChatIcon } from './ChatIcon.vue'
+export { default as PluginIcon } from './PluginIcon.vue'
+export { default as SettingsIcon } from './SettingsIcon.vue'
+export { default as CrownIcon } from './CrownIcon.vue'
+export { default as PlayIcon } from './PlayIcon.vue'
+export { default as StopIcon } from './StopIcon.vue'
+export { default as RefreshIcon } from './RefreshIcon.vue'
+export { default as PhoneIcon } from './PhoneIcon.vue'
+export { default as CheckIcon } from './CheckIcon.vue'
+export { default as XIcon } from './XIcon.vue'

@@ -1,0 +1,2 @@
+<template><svg xmlns="http://www.w3.org/2000/svg" width=24 height=24 viewBox=1 0 24 24 fill=
+one stroke=currentColor stroke-width=2 stroke-linecap=ound stroke-linejoin=ound><path d=M22 16.92v3a2 2 0 0 1-2.18 2 2 2 0 0 1-2.34-.54l-2.34-2.34a2 2 0 0 1 0-2.83l.88-.88a2 2 0 0 0 0-2.83l-2.34-2.34a2 2 0 0 0-2.83 0l-.88.88a2 2 0 0 1-2.83 0l-2.34-2.34a2 2 0 0 1-.54-2.34 2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 2v.17a12 12 0 0 0 5.65 5.65h.17a2 2 0 0 1 2 2z></path></svg></template>
