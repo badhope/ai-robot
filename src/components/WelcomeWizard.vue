@@ -399,22 +399,27 @@ async function nextStep() {
     currentStep.value++
   } else {
     // 保存配置并完成
+    const currentProviders = store.config?.ai?.providers
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updatedProviders: any = selectedProviders.value.reduce((acc, p) => {
+      const existing = currentProviders?.[p as keyof typeof currentProviders]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(acc as any)[p] = {
+        apiKey: apiKeys[p] || '',
+        baseUrl: existing?.baseUrl || '',
+        model: existing?.model || '',
+        enabled: true
+      }
+      return acc
+    }, { ...(currentProviders || {}) })
+    
     await store.saveConfig({
       mode: selectedMode.value,
       isFirstRun: false,
       ai: {
         ...store.config?.ai!,
         provider: selectedProviders.value[0],
-        providers: {
-          ...store.config?.ai.providers,
-          ...Object.fromEntries(
-            selectedProviders.value.map(p => [p, {
-              ...store.config?.ai.providers[p as keyof typeof store.config.ai.providers],
-              apiKey: apiKeys[p] || '',
-              enabled: true
-            }])
-          )
-        }
+        providers: updatedProviders
       }
     })
     emit('complete')

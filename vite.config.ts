@@ -5,8 +5,6 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue()],
   base: './',
-  root: 'src',
-  publicDir: '../public',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -17,7 +15,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
     sourcemap: false,
     rollupOptions: {
@@ -32,8 +30,5 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
-  },
-  css: {
-    postcss: '../postcss.config.js',
   },
 })

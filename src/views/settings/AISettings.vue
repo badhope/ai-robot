@@ -143,13 +143,13 @@ const isSimpleMode = computed(() => store.mode === 'simple')
 const currentProvider = computed(() => store.aiProvider)
 
 const providers = [
-  { id: 'alibaba', name: '阿里云通义', flag: '🇨🇳', badge: '推荐' },
-  { id: 'deepseek', name: 'DeepSeek', flag: '🇨🇳', badge: '热门' },
-  { id: 'zhipu', name: '智谱 AI', flag: '🇨🇳' },
-  { id: 'moonshot', name: '月之暗面', flag: '🇨🇳' },
-  { id: 'openai', name: 'OpenAI', flag: '🌍' },
-  { id: 'google', name: 'Google', flag: '🌍' },
-  { id: 'ollama', name: '本地 Ollama', flag: '💻' },
+  { id: 'alibaba', name: '阿里云通义', flag: '🇨🇳', badge: '推荐', url: 'https://bailian.console.aliyun.com/' },
+  { id: 'deepseek', name: 'DeepSeek', flag: '🇨🇳', badge: '热门', url: 'https://platform.deepseek.com/' },
+  { id: 'zhipu', name: '智谱 AI', flag: '🇨🇳', url: 'https://open.bigmodel.cn/' },
+  { id: 'moonshot', name: '月之暗面', flag: '🇨🇳', url: 'https://platform.moonshot.cn/' },
+  { id: 'openai', name: 'OpenAI', flag: '🌍', url: 'https://platform.openai.com/' },
+  { id: 'google', name: 'Google', flag: '🌍', url: 'https://ai.google.dev/' },
+  { id: 'ollama', name: '本地 Ollama', flag: '💻', url: 'https://ollama.com/' },
 ]
 
 const showApiKey = ref(false)
@@ -188,10 +188,10 @@ const availableModels = computed(() => {
 })
 
 function getProviderInfo(id: string) {
-  return providers.find(p => p.id === id) || { name: id, flag: '' }
+  return providers.find(p => p.id === id) || { name: id, flag: '', url: '' }
 }
 
-function selectProvider(id: string) {
+function selectProvider(_id: string) {
   // 切换 provider
   model.value = availableModels.value[0]
 }
@@ -210,19 +210,22 @@ async function testConnection() {
 }
 
 async function saveSettings() {
+  const currentProviders = store.config?.ai?.providers
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updatedProviders: any = {
+    ...currentProviders,
+    [currentProvider.value]: {
+      ...currentProviderConfig.value,
+      apiKey: apiKey.value,
+      baseUrl: baseUrl.value,
+      model: model.value,
+    }
+  }
   await store.saveConfig({
     ai: {
       ...store.config?.ai!,
       provider: currentProvider.value,
-      providers: {
-        ...store.config?.ai.providers,
-        [currentProvider.value]: {
-          ...currentProviderConfig.value,
-          apiKey: apiKey.value,
-          baseUrl: baseUrl.value,
-          model: model.value,
-        }
-      },
+      providers: updatedProviders,
       temperature: temperature.value,
       maxTokens: maxTokens.value,
       contextLength: contextLength.value

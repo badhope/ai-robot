@@ -110,7 +110,7 @@ function togglePlugin(plugin: typeof installedPlugins.value[0]) {
   // 保存设置
 }
 
-function openSettings(plugin: typeof installedPlugins.value[0]) {
+function openSettings(_plugin: typeof installedPlugins.value[0]) {
   // 打开插件设置
 }
 
