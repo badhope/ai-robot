@@ -4,6 +4,7 @@ __pycache__
 .venv*
 .conda/
 uv.lock
+uv.exe
 .coverage
 
 # IDE and editors
