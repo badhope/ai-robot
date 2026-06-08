@@ -1,0 +1,14 @@
+name: astrbot_plugin_doc_converter
+display_name: 文档转换器
+desc: 聊天式通用文档/图片转换器：PDF/Word/Excel/PPT/Markdown/HTML 互转 + OCR + 图片格式互转
+short_desc: PDF/Word/PPT/Excel/Markdown/图片 互转 + OCR
+author: badhope
+version: 0.1.0
+repo: https://github.com/badhope/astrbot_plugin_doc_converter
+logo: logo.png
+astrbot_version: ">=4.16,<5"
+tags:
+  - 工具
+  - 文档
+  - 转换
+  - OCR
