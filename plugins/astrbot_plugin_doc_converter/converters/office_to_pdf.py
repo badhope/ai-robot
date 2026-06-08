@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import shutil
 import tempfile
 from pathlib import Path
@@ -37,32 +36,29 @@ class OfficeToPdfConverter:
             cmd = [
                 binary,
                 "--headless",
-                "--convert-to", "pdf",
-                "--outdir", str(tmpdir),
+                "--convert-to",
+                "pdf",
+                "--outdir",
+                str(tmpdir),
                 str(input_path),
             ]
             proc = subprocess_run(cmd)
             if proc.returncode != 0:
                 raise RuntimeError(
-                    f"LibreOffice 转换失败 (code={proc.returncode}): "
-                    f"{proc.stderr}"
+                    f"LibreOffice 转换失败 (code={proc.returncode}): {proc.stderr}"
                 )
             produced = tmpdir / (input_path.stem + ".pdf")
             if not produced.exists():
-                raise RuntimeError(
-                    f"LibreOffice 未生成 PDF，stdout: {proc.stdout}"
-                )
+                raise RuntimeError(f"LibreOffice 未生成 PDF，stdout: {proc.stdout}")
             output_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(produced), str(output_path))
 
 
-def subprocess_run(cmd: list[str]) -> "_ProcResult":
+def subprocess_run(cmd: list[str]) -> _ProcResult:
     """Run subprocess synchronously and return result."""
     import subprocess
 
-    completed = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=300
-    )
+    completed = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
     return _ProcResult(
         returncode=completed.returncode,
         stdout=completed.stdout,

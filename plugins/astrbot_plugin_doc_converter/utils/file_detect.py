@@ -3,7 +3,6 @@ from __future__ import annotations
 import zipfile
 from pathlib import Path
 
-
 # (magic_bytes_prefix, detected_format) ; format=None 表示需进一步检查 ZIP 内容
 _MAGIC = [
     (b"%PDF", "pdf"),

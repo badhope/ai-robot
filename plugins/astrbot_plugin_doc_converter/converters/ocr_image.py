@@ -53,9 +53,7 @@ def run_ocr(image_path: Path, lang: str) -> str:
 
 def _tesseract(image_path: Path, lang: str) -> str:
     cmd = ["tesseract", str(image_path), "-", "-l", lang]
-    completed = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=120
-    )
+    completed = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
     if completed.returncode != 0:
         raise RuntimeError(f"tesseract 失败: {completed.stderr}")
     return completed.stdout

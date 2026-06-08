@@ -1,0 +1,41 @@
+{
+  "tmp_dir": {
+    "type": "text",
+    "description": "临时文件目录（用于缓存转换中的中间文件）",
+    "default": "data/plugin_tmp/doc_converter",
+    "hint": "相对 AstrBot 数据目录的路径，或绝对路径"
+  },
+  "timeout_seconds": {
+    "type": "number",
+    "description": "单次转换超时（秒）",
+    "default": 120,
+    "min": 10,
+    "max": 3600,
+    "hint": "超时后将自动取消并返回错误"
+  },
+  "max_file_size_mb": {
+    "type": "number",
+    "description": "允许处理的最大文件（MB）",
+    "default": 50,
+    "min": 1,
+    "max": 500
+  },
+  "image_quality": {
+    "type": "number",
+    "description": "图片输出质量（1-100，越大越清晰）",
+    "default": 90,
+    "min": 1,
+    "max": 100
+  },
+  "ocr_lang": {
+    "type": "text",
+    "description": "OCR 识别语言（Tesseract 格式，使用 + 连接多语种）",
+    "default": "chi_sim+eng",
+    "hint": "示例：chi_sim+eng、chi_tra+eng、jpn+eng、eng"
+  },
+  "auto_cleanup": {
+    "type": "bool",
+    "description": "插件关闭时是否自动清理临时文件",
+    "default": true
+  }
+}

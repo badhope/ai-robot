@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-
 _BASE_CSS = (
     "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"
     "max-width:780px;margin:2em auto;line-height:1.6;padding:0 1em;color:#222;}"

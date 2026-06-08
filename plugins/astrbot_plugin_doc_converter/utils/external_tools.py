@@ -3,7 +3,6 @@ from __future__ import annotations
 import shutil
 from dataclasses import dataclass
 
-
 try:
     import rapidocr_onnxruntime  # noqa: F401
 
