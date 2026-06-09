@@ -1,3 +1,15 @@
+# ai-robot (my AstrBot fork)
+
+> **Fork notice.** This is my personal mirror of
+> [AstrBotDevs / AstrBot](https://github.com/AstrBotDevs/AstrBot).
+> I don't accept issues or PRs here — those belong to the upstream
+> AstrBot project. I track a specific version so I can deploy
+> without depending on a release tag moving under me.
+
+The rest of this README is upstream's own description.
+
+---
+
 ![astrbot-github-banner-v2-light-0405_副本](https://github.com/user-attachments/assets/36fb04e4-cc75-4454-bd8b-049d11aa86f9)
 
 
