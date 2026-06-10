@@ -1,34 +1,36 @@
-<!--Please describe the motivation for this change: What problem does it solve? (e.g., Fixes XX issue, adds YY feature)-->
-<!--请描述此项更改的动机：它解决了什么问题？（例如：修复了 XX issue，添加了 YY 功能）-->
+## What
 
-### Modifications / 改动点
+<!-- One-paragraph description of the change. -->
 
-<!--Please summarize your changes: What core files were modified? What functionality was implemented?-->
-<!--请总结你的改动：哪些核心文件被修改了？实现了什么功能？-->
+## Why
 
-- [x] This is NOT a breaking change. / 这不是一个破坏性变更。
-<!-- If your changes is a breaking change, please uncheck the checkbox above -->
+<!-- Motivation. Link any issue this PR fixes (Fixes #123). -->
 
-### Screenshots or Test Results / 运行截图或测试结果
+## How
 
-<!--Please paste screenshots, GIFs, or test logs here as evidence of executing the "Verification Steps" to prove this change is effective.-->
-<!--请粘贴截图、GIF 或测试日志，作为执行“验证步骤”的证据，证明此改动有效。-->
+<!-- Approach: list the changes, files touched, design decisions. -->
 
----
+## Test plan
 
-### Checklist / 检查清单
+<!-- How did you verify? Which commands, which test suites? -->
 
-<!--If merged, your code will serve tens of thousands of users! Please double-check the following items before submitting.-->
-<!--如果分支被合并，您的代码将服务于数万名用户！在提交前，请核查一下几点内容。-->
+- [ ] Existing tests pass
+- [ ] Added tests for new behaviour
+- [ ] Manually verified in dev / staging
 
-- [ ] 😊 If there are new features added in the PR, I have discussed it with the authors through issues/emails, etc. 
-  / 如果 PR 中有新加入的功能，已经通过 Issue / 邮件等方式和作者讨论过。
+## Risk & rollout
 
-- [ ] 👀 My changes have been well-tested, **and "Verification Steps" and "Screenshots" have been provided above**.
-  / 我的更改经过了良好的测试，**并已在上方提供了“验证步骤”和“运行截图”**。
+<!-- What can break? Is rollback straightforward? Is there a feature flag? -->
 
-- [ ] 🤓 I have ensured that no new dependencies are introduced, OR if new dependencies are introduced, they have been added to the appropriate locations in `requirements.txt` and `pyproject.toml`.
-  / 我确保没有引入新依赖库，或者引入了新依赖库的同时将其添加到 `requirements.txt` 和 `pyproject.toml` 文件相应位置。
+## Checklist
 
-- [ ] 😮 My changes do not introduce malicious code.
-  / 我的更改没有引入恶意代码。
+- [ ] My branch is up-to-date with the base branch
+- [ ] I ran `gitleaks` locally (or let CI do it)
+- [ ] I added / updated tests for new behaviour
+- [ ] I updated documentation (README, CHANGELOG, …)
+- [ ] I did **not** commit any secrets, tokens, or credentials
+- [ ] My commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+
+> **Never commit secrets.** If you accidentally committed a token,
+> rotate it **immediately** in the provider's settings, then update
+> the PR to remove the secret. See [SECURITY.md](./SECURITY.md).
